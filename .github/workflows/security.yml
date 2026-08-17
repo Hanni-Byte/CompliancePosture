@@ -1,0 +1,127 @@
+# docs/SECURITY.md explains why each scanner is here and what was deliberately
+# excluded. Scope: SAST (CodeQL), SCA (OSV-Scanner + Dependency Review),
+# container (Trivy), DAST (ZAP baseline, passive). Secrets are covered by
+# GitHub native secret scanning + push protection (repo settings), not CI.
+name: Security
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 5 * * 1" # weekly: catches new CVEs/rules with no code change
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  codeql:
+    name: SAST / CodeQL (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [javascript-typescript, actions]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-extended
+      - uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"
+
+  osv-scan:
+    name: SCA / OSV-Scanner
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install osv-scanner
+        run: |
+          curl -sSL -o /usr/local/bin/osv-scanner \
+            https://github.com/google/osv-scanner/releases/latest/download/osv-scanner_linux_amd64
+          chmod +x /usr/local/bin/osv-scanner
+      - name: Scan lockfiles (fails on known vulnerabilities)
+        run: osv-scanner scan --format sarif --output osv.sarif --recursive .
+      - uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: osv.sarif
+          category: osv-scanner
+
+  dependency-review:
+    name: SCA / Dependency Review
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+
+  trivy:
+    name: Container / Trivy image scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build prod image
+        run: docker build -f docker/Dockerfile -t complianceposture:scan .
+      - name: Scan image (gates on fixable HIGH/CRITICAL)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: complianceposture:scan
+          format: sarif
+          output: trivy.sarif
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+      - uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: trivy.sarif
+          category: trivy-image
+
+  zap-baseline:
+    name: DAST / ZAP baseline (headers & CSP gate)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and start prod image
+        run: |
+          docker build -f docker/Dockerfile -t complianceposture:dast .
+          docker run -d --rm -p 8080:80 -e SITE_ADDRESS=":80" --name cp complianceposture:dast
+          for i in $(seq 1 15); do curl -fsSo /dev/null http://localhost:8080/ && break; sleep 1; done
+          curl -fsSo /dev/null http://localhost:8080/
+      - name: Passive baseline scan (accepted findings in .zap/rules.tsv)
+        run: |
+          chmod -R a+w .zap
+          docker run --rm --network host -v "$PWD/.zap:/zap/wrk" \
+            ghcr.io/zaproxy/zaproxy:stable \
+            zap-baseline.py -t http://localhost:8080 -c rules.tsv -w baseline-report.md
+      - name: Stop app container
+        if: always()
+        run: docker stop cp || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: zap-baseline-report
+          path: .zap/baseline-report.md
+          if-no-files-found: ignore

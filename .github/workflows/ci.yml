@@ -58,7 +58,8 @@ jobs:
           curl -fsSI http://localhost:8080/ | grep -qi "content-security-policy"
           docker stop cp
       - name: Publish build digest (trust artifact, D18)
-        run: docker image inspect complianceposture:ci --format 'image id: {{.Id}}'
+        run: |
+          docker image inspect complianceposture:ci --format 'image id: {{.Id}}'
 
   dco:
     runs-on: ubuntu-latest

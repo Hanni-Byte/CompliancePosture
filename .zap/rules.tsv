@@ -1,0 +1,2 @@
+10049	IGNORE	(Storable and Cacheable Content — intentional: public static site, cache headers are deliberate)
+10109	IGNORE	(Modern Web Application — informational SPA detection, not a finding)
