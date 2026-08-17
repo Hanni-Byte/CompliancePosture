@@ -1,5 +1,11 @@
 # CompliancePosture app image — static site + Caddy, zero API surface.
 # Digest-pinned bases (D18: reproducible trust).
+#
+# Build knobs (override with --build-arg), nothing hardcoded below:
+#   CADDY_VERSION   caddy release to build ("latest" or e.g. "v2.10.2")
+#   CADDY_DEP_BUMPS modules lifted above caddy's own go.mod pins for security
+ARG CADDY_VERSION=latest
+ARG CADDY_DEP_BUMPS="golang.org/x/net@latest golang.org/x/text@latest google.golang.org/grpc@latest"
 
 FROM node:26-alpine@sha256:aadf416b2cdce311a8811ba3f0608a61b77dbf997500e2eafe781b51f6a0b019 AS build
 WORKDIR /app
@@ -8,7 +14,31 @@ RUN npm ci
 COPY app/ .
 RUN npm run build
 
+# The official caddy image ships a binary compiled with a stale Go toolchain
+# and vulnerable modules (x/net, x/text, grpc) — unfixable via apk. Compile
+# Caddy from source with the current patched toolchain instead.
+FROM golang:alpine@sha256:3889b425f035be855a72fb4755265311293b6d414521f0a519d819df32222d83 AS caddy-build
+ARG CADDY_VERSION
+ARG CADDY_DEP_BUMPS
+WORKDIR /build
+RUN printf '%s\n' \
+      'package main' \
+      'import (' \
+      '	caddycmd "github.com/caddyserver/caddy/v2/cmd"' \
+      '	_ "github.com/caddyserver/caddy/v2/modules/standard"' \
+      ')' \
+      'func main() { caddycmd.Main() }' > main.go \
+ && go mod init caddy-dist \
+ && go get "github.com/caddyserver/caddy/v2@${CADDY_VERSION}" \
+ && go get ${CADDY_DEP_BUMPS} \
+ && go mod tidy \
+ && CGO_ENABLED=0 go build -trimpath -o /caddy
+
 FROM caddy:2-alpine@sha256:5f5c8640aae01df9654968d946d8f1a56c497f1dd5c5cda4cf95ab7c14d58648
+# The pinned base lags Alpine security releases (c-ares/curl CVEs); pull the
+# patched packages while keeping the base digest-pinned.
+RUN apk --no-cache upgrade
+COPY --from=caddy-build /caddy /usr/bin/caddy
 COPY docker/Caddyfile /etc/caddy/Caddyfile
 COPY --from=build /app/dist /srv
 COPY packs/ /srv/packs/
