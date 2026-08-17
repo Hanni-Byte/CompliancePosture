@@ -82,13 +82,17 @@ jobs:
       - uses: actions/checkout@v7
       - name: Build prod image
         run: docker build -f docker/Dockerfile -t complianceposture:scan .
-      - name: Scan image (gates on fixable HIGH/CRITICAL)
+      # Zero-tolerance gate: ANY severity with an available fix blocks the
+      # build. ignore-unfixed stays on because a vulnerability with no released
+      # fix anywhere is not actionable — it starts gating (and gets picked up
+      # by the image's @latest dep bumps) the moment upstream ships a fix.
+      - name: Scan image (gates on any fixable vulnerability)
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: complianceposture:scan
           format: sarif
           output: trivy.sarif
-          severity: HIGH,CRITICAL
+          severity: UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
           ignore-unfixed: true
           exit-code: "1"
       - uses: github/codeql-action/upload-sarif@v4

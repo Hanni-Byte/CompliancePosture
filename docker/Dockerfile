@@ -2,10 +2,13 @@
 # Digest-pinned bases (D18: reproducible trust).
 #
 # Build knobs (override with --build-arg), nothing hardcoded below:
-#   CADDY_VERSION   caddy release to build ("latest" or e.g. "v2.10.2")
+#   CADDY_VERSION   caddy ref to build: release tag, "latest", or commit SHA
 #   CADDY_DEP_BUMPS modules lifted above caddy's own go.mod pins for security
-ARG CADDY_VERSION=latest
-ARG CADDY_DEP_BUMPS="golang.org/x/net@latest golang.org/x/text@latest google.golang.org/grpc@latest"
+# Pinned to the master commit that adapts caddy to the patched cel-go
+# v0.29.2 (GHSA-gcjh-h69q-9w9g fix, unreleased as of 2026-08-17).
+# TODO: switch back to the release tag once v2.11.5+ ships.
+ARG CADDY_VERSION=b2693fb63a30e6d7be0972c3645e9a2c0a500e93
+ARG CADDY_DEP_BUMPS="golang.org/x/net@latest golang.org/x/text@latest golang.org/x/crypto@latest google.golang.org/grpc@latest"
 
 FROM node:26-alpine@sha256:aadf416b2cdce311a8811ba3f0608a61b77dbf997500e2eafe781b51f6a0b019 AS build
 WORKDIR /app

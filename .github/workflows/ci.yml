@@ -72,6 +72,10 @@ jobs:
         run: |
           status=0
           for sha in $(git rev-list origin/${{ github.base_ref }}..HEAD); do
+            # Bot commits (Dependabot etc.) are exempt: DCO certifies human
+            # copyright provenance; automated version bumps have none.
+            author=$(git log -1 --format=%ae "$sha")
+            case "$author" in *"[bot]@users.noreply.github.com") continue ;; esac
             if ! git log -1 --format=%B "$sha" | grep -q "^Signed-off-by: "; then
               echo "missing Signed-off-by: $sha"
               status=1
