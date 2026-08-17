@@ -95,7 +95,9 @@ jobs:
       - name: Check DCO sign-off on all commits
         run: |
           status=0
-          for sha in $(git rev-list origin/${{ github.base_ref }}..HEAD); do
+          # --no-merges: skips GitHub's synthetic PR merge commit (and any
+          # real merge commits) — a merge can never carry a sign-off.
+          for sha in $(git rev-list --no-merges origin/${{ github.base_ref }}..HEAD); do
             # Bot commits (Dependabot etc.) are exempt: DCO certifies human
             # copyright provenance; automated version bumps have none.
             author=$(git log -1 --format=%ae "$sha")
