@@ -83,7 +83,7 @@ jobs:
       - name: Build prod image
         run: docker build -f docker/Dockerfile -t complianceposture:scan .
       - name: Scan image (gates on fixable HIGH/CRITICAL)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: complianceposture:scan
           format: sarif
