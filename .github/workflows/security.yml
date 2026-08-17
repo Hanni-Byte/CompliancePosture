@@ -30,7 +30,7 @@ jobs:
       matrix:
         language: [javascript-typescript, actions]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
@@ -46,7 +46,7 @@ jobs:
       contents: read
       security-events: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install osv-scanner
         run: |
           curl -sSL -o /usr/local/bin/osv-scanner \
@@ -67,7 +67,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/dependency-review-action@v4
         with:
           fail-on-severity: high
@@ -79,7 +79,7 @@ jobs:
       contents: read
       security-events: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build prod image
         run: docker build -f docker/Dockerfile -t complianceposture:scan .
       - name: Scan image (gates on fixable HIGH/CRITICAL)
@@ -103,7 +103,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and start prod image
         run: |
           docker build -f docker/Dockerfile -t complianceposture:dast .
