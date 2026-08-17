@@ -1,0 +1,36 @@
+{
+  "name": "complianceposture",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "license": "AGPL-3.0-only",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "depcruise": "depcruise src",
+    "test": "vitest run",
+    "smoke": "node scripts/smoke.mjs",
+    "check": "npm run typecheck && npm run lint && npm run depcruise && npm run test && npm run smoke"
+  },
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "dependency-cruiser": "^16.10.0",
+    "eslint": "^9.30.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.8.0",
+    "typescript-eslint": "^8.35.0",
+    "vite": "^7.0.0",
+    "vitest": "^3.2.0"
+  }
+}

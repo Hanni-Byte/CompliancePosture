@@ -1,0 +1,30 @@
+# SITE_ADDRESS: ":80" locally / in compose; the Hetzner deploy overrides it to
+# complianceposture.hannibyte.com for auto-TLS (Feature 7).
+{$SITE_ADDRESS::80} {
+	root * /srv
+	encode gzip zstd
+
+	header {
+		# Placeholder CSP for the bootstrap build. Feature 1 replaces this with
+		# the build-generated policy derived from the provider registry
+		# (connect-src = self + registered provider origins; constitution §8).
+		Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "no-referrer"
+		Cross-Origin-Opener-Policy "same-origin"
+		-Server
+	}
+
+	# Long-cache immutable hashed assets; short-cache pack manifests.
+	@immutable path /assets/*
+	header @immutable Cache-Control "public, max-age=31536000, immutable"
+	@packs path /packs/*
+	header @packs Cache-Control "public, max-age=300"
+
+	# Privacy promise: we don't even log your IP. Access logs stay disabled
+	# (Caddy's default when no `log` directive is configured). Do not add one.
+
+	# SPA fallback
+	try_files {path} /index.html
+	file_server
+}

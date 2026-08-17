@@ -1,0 +1,4 @@
+# Root convenience wrapper so `docker compose --profile <dev|packs|prod> up`
+# works from the repo root. The real definitions live in docker/compose.yaml.
+include:
+  - docker/compose.yaml

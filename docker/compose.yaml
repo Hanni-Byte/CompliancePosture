@@ -1,0 +1,46 @@
+name: complianceposture
+
+services:
+  dev:
+    profiles: ["dev"]
+    image: node:22-alpine@sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32
+    working_dir: /app
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    ports:
+      - "5173:5173"
+    volumes:
+      - ../app:/app
+      - dev_node_modules:/app/node_modules
+
+  # Optional local model so contributors can develop fully offline (D2).
+  ollama:
+    profiles: ["dev"]
+    image: ollama/ollama:latest
+    environment:
+      OLLAMA_ORIGINS: "http://localhost:5173,http://localhost:8080"
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+
+  packs:
+    profiles: ["packs"]
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.packs
+    volumes:
+      - ../packs:/out
+
+  prod:
+    profiles: ["prod"]
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      SITE_ADDRESS: ":80"
+    ports:
+      - "8080:80"
+
+volumes:
+  dev_node_modules:
+  ollama_models:
