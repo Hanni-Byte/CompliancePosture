@@ -6,14 +6,16 @@
   "license": "AGPL-3.0-only",
   "scripts": {
     "dev": "vite --host",
-    "build": "tsc --noEmit && vite build",
+    "generate:csp": "node --experimental-strip-types scripts/generate-csp.mjs",
+    "build": "npm run generate:csp && tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src",
     "depcruise": "depcruise src",
     "test": "vitest run",
     "smoke": "node scripts/smoke.mjs",
-    "check": "npm run typecheck && npm run lint && npm run depcruise && npm run test && npm run smoke"
+    "check": "npm run typecheck && npm run lint && npm run depcruise && npm run test && npm run smoke",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "react": "^19.1.1",
@@ -22,6 +24,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/vite": "^4.1.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",

@@ -10,5 +10,8 @@ __pycache__/
 .env
 .env.*
 app/.vite/
+app/csp.caddy
 .zap/*
 !.zap/rules.tsv
+app/test-results/
+app/playwright-report/

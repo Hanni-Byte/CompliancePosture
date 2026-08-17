@@ -34,6 +34,29 @@ services:
     volumes:
       - ../packs:/out
 
+  e2e-app:
+    profiles: ["e2e"]
+    container_name: cp-e2e-app
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      SITE_ADDRESS: ":80"
+
+  e2e:
+    profiles: ["e2e"]
+    container_name: cp-e2e
+    image: mcr.microsoft.com/playwright:v1.62.1-noble
+    depends_on:
+      - e2e-app
+    working_dir: /work
+    environment:
+      PLAYWRIGHT_BASE_URL: "http://e2e-app:80"
+    volumes:
+      - ../app:/work
+      - e2e_node_modules:/work/node_modules
+    command: sh -c "npm ci --no-audit --no-fund && npx playwright test"
+
   prod:
     profiles: ["prod"]
     container_name: cp-prod
@@ -47,4 +70,5 @@ services:
 
 volumes:
   dev_node_modules:
+  e2e_node_modules:
   ollama_models:

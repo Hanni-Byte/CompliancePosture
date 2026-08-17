@@ -30,6 +30,11 @@ prod:
 prod-down:
 	docker compose --profile prod down
 
+# ── E2E (Playwright vs prod image) ───────────────────────────────────────────
+
+e2e:
+	docker compose --profile e2e up --build --abort-on-container-exit --exit-code-from e2e
+
 # ── Pack pipeline (Feature 2) ────────────────────────────────────────────────
 
 packs:
@@ -101,4 +106,4 @@ superclean: clean
 
 .PHONY: up up-without-vite down restart prod prod-down packs logs logs_tail \
 	vite_logs ollama_logs prod_logs vite_bash ollama_bash prod_bash \
-	ollama-pull check typecheck lint depcruise test smoke clean superclean
+	ollama-pull check e2e typecheck lint depcruise test smoke clean superclean
