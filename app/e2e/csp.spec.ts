@@ -12,6 +12,15 @@ declare global {
   }
 }
 
+/** blockedURI can be a full URL, a bare origin, or "inline"/"" — compare origins, not prefixes. */
+function violationOrigin(blockedUri: string): string | null {
+  try {
+    return new URL(blockedUri).origin;
+  } catch {
+    return null;
+  }
+}
+
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
   await page.evaluate(() => {
@@ -34,7 +43,7 @@ test("fetch to a non-allowlisted canary origin is blocked by CSP", async ({ page
 
   expect(outcome).toBe("rejected");
   const violations = await page.evaluate(() => window.cspViolations);
-  expect(violations.some((uri) => uri.startsWith(CANARY_ORIGIN))).toBe(true);
+  expect(violations.some((uri) => violationOrigin(uri) === CANARY_ORIGIN)).toBe(true);
 });
 
 test("fetch to a registered provider origin is NOT blocked by CSP", async ({ page }) => {
@@ -49,7 +58,7 @@ test("fetch to a registered provider origin is NOT blocked by CSP", async ({ pag
   }, ALLOWLISTED_ORIGIN);
 
   const violations = await page.evaluate(() => window.cspViolations);
-  expect(violations.filter((uri) => uri.startsWith(ALLOWLISTED_ORIGIN))).toEqual([]);
+  expect(violations.filter((uri) => violationOrigin(uri) === ALLOWLISTED_ORIGIN)).toEqual([]);
 });
 
 test("security headers are present on the document response", async ({ page }) => {
