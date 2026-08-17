@@ -3,6 +3,7 @@ name: complianceposture
 services:
   dev:
     profiles: ["dev"]
+    container_name: cp-vite
     image: node:22-alpine@sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32
     working_dir: /app
     command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
@@ -14,7 +15,8 @@ services:
 
   # Optional local model so contributors can develop fully offline (D2).
   ollama:
-    profiles: ["dev"]
+    profiles: ["dev", "ollama"]
+    container_name: cp-ollama
     image: ollama/ollama:latest
     environment:
       OLLAMA_ORIGINS: "http://localhost:5173,http://localhost:8080"
@@ -25,6 +27,7 @@ services:
 
   packs:
     profiles: ["packs"]
+    container_name: cp-packs
     build:
       context: ..
       dockerfile: docker/Dockerfile.packs
@@ -33,6 +36,7 @@ services:
 
   prod:
     profiles: ["prod"]
+    container_name: cp-prod
     build:
       context: ..
       dockerfile: docker/Dockerfile

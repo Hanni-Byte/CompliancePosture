@@ -17,14 +17,14 @@ Pre-v0.1, under active development. Build order and full context: [`docs/HANDOFF
 ## Development
 
 ```bash
-docker compose --profile dev up      # containerized dev server on :5173
-# or natively:
-cd app && npm install && npm run dev
-
-cd app && npm run check              # tsc + eslint + dependency-cruiser + tests + smoke
-
-docker compose --profile prod up --build   # production image (Caddy, static) on :8080
+make up               # containerized dev: Vite on :5173 + local Ollama
+make up-without-vite  # Ollama only; run Vite on the host: cd app && npm run dev
+make check            # tsc + eslint + dependency-cruiser + tests + smoke
+make prod             # production image (Caddy, static) on :8080
+make down             # stop everything
 ```
+
+See the `Makefile` for logs/shell/cleanup targets, or use `docker compose --profile <dev|ollama|packs|prod>` directly.
 
 ## Contributing
 
