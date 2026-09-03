@@ -87,7 +87,7 @@ jobs:
       # fix anywhere is not actionable — it starts gating (and gets picked up
       # by the image's @latest dep bumps) the moment upstream ships a fix.
       - name: Scan image (gates on any fixable vulnerability)
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: complianceposture:scan
           format: sarif
