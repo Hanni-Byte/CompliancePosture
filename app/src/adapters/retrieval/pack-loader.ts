@@ -30,7 +30,13 @@ interface LoadedPack {
 }
 
 export async function webCryptoSha256(bytes: Uint8Array): Promise<string> {
-  const digest = await crypto.subtle.digest("SHA-256", bytes as BufferSource);
+  // Browsers expose Web Crypto only in secure contexts (https or localhost).
+  // Without it a pack cannot be verified, so it must not be used (fail closed).
+  const subtle: SubtleCrypto | undefined = globalThis.crypto?.subtle;
+  if (!subtle) {
+    throw new Error("Web Crypto is unavailable: packs can only be verified in a secure context (HTTPS or localhost)");
+  }
+  const digest = await subtle.digest("SHA-256", bytes as BufferSource);
   return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 

@@ -55,9 +55,13 @@ services:
     image: mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e
     depends_on:
       - e2e-app
+    # Share the app container's network so the browser reaches it as
+    # http://localhost — a secure context, which Web Crypto (pack
+    # verification) requires. http://e2e-app would not be.
+    network_mode: "service:e2e-app"
     working_dir: /work
     environment:
-      PLAYWRIGHT_BASE_URL: "http://e2e-app:80"
+      PLAYWRIGHT_BASE_URL: "http://localhost:80"
     volumes:
       - ../app:/work
       - e2e_node_modules:/work/node_modules

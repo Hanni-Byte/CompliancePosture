@@ -139,6 +139,21 @@ describe("PackLoader", () => {
     }
   });
 
+  it("explains an insecure context (no Web Crypto) instead of hanging or crashing", async () => {
+    const { fetchFn } = await fixture();
+    const loader = new PackLoader({
+      baseUrl: "/packs",
+      fetchFn,
+      sha256: () => Promise.reject(new Error("Web Crypto is unavailable: packs can only be verified in a secure context (HTTPS or localhost)")),
+    });
+    const result = await loader.loadPack("eu_ai_act");
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.kind).toBe("network");
+      expect(result.error.message).toMatch(/secure context/);
+    }
+  });
+
   it("never rejects: a body-stream failure becomes a network error", async () => {
     const { loader } = await fixture({ throwOnArrayBuffer: true });
     const result = await loader.loadPack("eu_ai_act");
