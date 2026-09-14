@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, statSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig, type Plugin } from "vitest/config";
@@ -18,7 +18,12 @@ function servePacks(): Plugin {
     const rel = normalize(decodeURIComponent(req.url.slice("/packs/".length).split("?")[0] ?? ""));
     if (rel.startsWith("..")) return next();
     const file = join(packsRoot, rel);
-    if (!existsSync(file) || !statSync(file).isFile()) {
+    // Read directly and treat any failure (missing, directory, …) as 404 —
+    // no check-then-use window.
+    let body: Buffer;
+    try {
+      body = readFileSync(file);
+    } catch {
       res.statusCode = 404;
       res.setHeader("content-type", "text/plain");
       return res.end("not found");
@@ -26,7 +31,7 @@ function servePacks(): Plugin {
     res.statusCode = 200;
     res.setHeader("content-type", "application/json");
     res.setHeader("cache-control", "no-cache");
-    res.end(readFileSync(file));
+    res.end(body);
   };
   return {
     name: "complianceposture-serve-packs",
