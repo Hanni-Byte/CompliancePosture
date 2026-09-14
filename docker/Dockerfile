@@ -12,7 +12,7 @@
 ARG CADDY_VERSION=b2693fb63a30e6d7be0972c3645e9a2c0a500e93
 ARG CADDY_DEP_BUMPS="golang.org/x/net@latest golang.org/x/text@latest golang.org/x/crypto@latest google.golang.org/grpc@latest"
 
-FROM node:26-alpine@sha256:2d984a15c9b54fd0aeb608b8e0d0d83529eb34d2966db27a1fb4f1edc3d298a3 AS build
+FROM node:26-alpine@sha256:ef24c5053d50fdc3e4e56eb4e7ddb7861874ab0fdc797046ba897581deb8e868 AS build
 WORKDIR /app
 COPY app/package.json app/package-lock.json ./
 RUN npm ci
