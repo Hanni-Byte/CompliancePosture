@@ -22,7 +22,7 @@ RUN npm run build
 # The official caddy image ships a binary compiled with a stale Go toolchain
 # and vulnerable modules (x/net, x/text, grpc) — unfixable via apk. Compile
 # Caddy from source with the current patched toolchain instead.
-FROM golang:alpine@sha256:4c9fe60190a2a3350ddc51de80d0224b8a6698d12bdfc999fee45ea9d6c46dbc AS caddy-build
+FROM golang:alpine@sha256:cf6fca6641884b8433441b2b0652976f975e1d0fdd26d177eaaf8596087f3125 AS caddy-build
 ARG CADDY_VERSION
 ARG CADDY_DEP_BUMPS
 WORKDIR /build
