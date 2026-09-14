@@ -68,3 +68,18 @@ test("security headers are present on the document response", async ({ page }) =
   expect(headers["x-content-type-options"]).toBe("nosniff");
   expect(headers["referrer-policy"]).toBe("no-referrer");
 });
+test("the opaque no-cors reachability probe is not blocked by COEP", async ({ page }) => {
+  // The gateway distinguishes CORS blocks from network failures by probing
+  // the provider origin with mode: "no-cors". COEP require-corp would reject
+  // that opaque response; credentialless must let it through.
+  await page.goto("/");
+  const outcome = await page.evaluate(async (origin) => {
+    try {
+      await fetch(origin, { method: "GET", mode: "no-cors" });
+      return "resolved";
+    } catch (e) {
+      return `rejected: ${String(e)}`;
+    }
+  }, ALLOWLISTED_ORIGIN);
+  expect(outcome).toBe("resolved");
+});

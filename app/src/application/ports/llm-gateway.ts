@@ -40,7 +40,9 @@ export type LlmError =
   | { kind: "provider_error"; message: string; status?: number }
   /** Response failed schema validation even after one repair retry (§2.4). */
   | { kind: "invalid_response"; message: string }
-  | { kind: "aborted"; message: string };
+  | { kind: "aborted"; message: string }
+  /** The key could not be kept in the chosen custody (e.g. storage disabled). */
+  | { kind: "storage"; message: string };
 
 export interface CostEstimate {
   inputTokens: number;
@@ -50,6 +52,7 @@ export interface CostEstimate {
 
 export interface ProviderPing {
   providerId: string;
+  /** The model `complete` will actually use — never a fallback the caller did not choose. */
   model: string;
 }
 

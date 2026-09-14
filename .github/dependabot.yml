@@ -13,14 +13,22 @@ updates:
       - dependency-name: typescript
         update-types: ["version-update:semver-major"]
 
+  # Exact pins in tools/packs/requirements.txt (the pipeline's lockfile).
+  - package-ecosystem: pip
+    directory: /tools/packs
+    schedule:
+      interval: weekly
+      day: monday
+
+  # Actions are SHA-pinned; Dependabot bumps the SHA and the version comment.
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
       day: monday
 
-  # Tracks the digest-pinned node/caddy base images (D18: pins stay pinned,
-  # Dependabot proposes the bump).
+  # Tracks the digest-pinned base images (D18: pins stay pinned, Dependabot
+  # proposes the bump) in Dockerfile, Dockerfile.packs and compose.yaml.
   - package-ecosystem: docker
     directory: /docker
     schedule:

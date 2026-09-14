@@ -1,0 +1,25 @@
+CompliancePosture — third-party content notices
+
+The knowledge packs under packs/ redistribute and adapt third-party texts.
+The same attribution is carried in each pack's manifest.json ("license") and
+rendered in the app wherever pack content is shown.
+
+EU Artificial Intelligence Act — Regulation (EU) 2024/1689 (packs/eu_ai_act)
+  © European Union, 1998-2024. Reuse authorised under Commission Decision
+  2011/833/EU on the reuse of Commission documents. Source: EUR-Lex
+  (https://eur-lex.europa.eu). The European Union does not endorse this
+  product and gives no guarantee as to the accuracy of the reproduced text;
+  only the Official Journal of the European Union is authentic.
+
+OWASP Top 10 for LLM Applications 2026 (packs/owasp_llm_top10)
+  © OWASP Foundation / OWASP GenAI Security Project. Licensed under the
+  Creative Commons Attribution-ShareAlike 4.0 International License
+  (https://creativecommons.org/licenses/by-sa/4.0/). The chunked pack is an
+  adaptation and is distributed under the same license.
+
+OWASP GenAI Security Crosswalk (packs/owasp_llm_top10/crosswalk.json)
+  © 2026 OWASP GenAI Data Security Initiative. CC BY-SA 4.0. Adapted
+  (filtered to selected frameworks, resolved to EU AI Act passages).
+
+Application code is licensed under AGPL-3.0-only (see LICENSE); data packs
+keep their own licenses as stated above.

@@ -1,0 +1,14 @@
+.git
+.github
+.cache
+.idea
+.venv
+.zap
+**/node_modules
+**/dist
+**/test-results
+**/playwright-report
+**/__pycache__
+tools/packs/raw
+docs
+*.md

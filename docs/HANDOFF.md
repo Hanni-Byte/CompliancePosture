@@ -66,9 +66,15 @@ Every decision from our design sessions, re-verified. ✅ = confirmed as-is. �
 | D15 | spec-kit workflow; features must name their target layer | ✅ | "A requirement that can't name its layer isn't specified yet." |
 | D16 | License: AGPL-3.0 | 🔧 | Protects the consulting funnel from closed hosted forks. **Addition:** require DCO sign-off on contributions from day one (and consider a light CLA) — sole-holder relicensing flexibility (AGPL→Apache is possible, reverse isn't) only survives if external contributions don't fragment copyright. |
 | D17 | Docker from the beginning | ✅ NEW | Full strategy in §10. Prod container = static files + Caddy, zero API surface — Docker does not create a "backend" and does not weaken D1. |
-| D18 | Reproducible trust: SRI, published build hashes, reproducible builds, dogfooded report in repo | ✅ | Docker pins (digest-pinned base images) make reproducibility easier. |
+| D18 | Trust artifacts: SRI, published **image digest**, digest-pinned bases, dogfooded report in repo | 🔧 | The prod image is deliberately **not** byte-reproducible: security bumps (`@latest` Go modules, `apk upgrade`) are applied at build time so fixes ship the day they exist. The trust artifact is the published digest of the image CI built and scanned, not a rebuild. Packs, by contrast, ARE byte-reproducible (pinned + verified sources). |
 | D19 | Report exports: .md (source of truth) → HTML → PDF via print stylesheet; raw .json | ✅ | Deterministic: same data → byte-identical markdown (golden-tested). |
 | D20 | Errors: `Result<T,E>` unions across all boundaries; no exceptions cross layers | ✅ | One retry with repair prompt on invalid LLM output, then degrade per §2.4. |
+| D21 | **No prebuilt `index.bin` in packs** — BM25 index is built in-browser from `chunks.json` at load | ✅ NEW (plan review 2026-09-03) | A shipped binary index makes the Python and TS tokenizers a hidden second contract that must match byte-for-byte, violating "pack schema is the only contract". A few hundred chunks index in milliseconds client-side; retrieval stays deterministic and key-free. Packs = `manifest.json` + `chunks.json` + `topics.json`. |
+| D22 | **Live provider smoke before building on the gateway** — `LIVE_SMOKE=1` runs ping + one structured completion against real Mistral/Ollama; manual, never in CI | ✅ NEW (plan review 2026-09-03) | The contract suite proves adapters behave identically against fixtures, not that providers accept our `response_format: json_schema` wire format. One hour of real-wire proof de-risks Features 3–5. |
+| D23 | **zod stays out of L2** — prompt registry declares plain JSON schema + hand-written type guard (`SchemaRef.parse`); adapters keep zod for envelopes | ✅ NEW (plan review 2026-09-03) | Keeps "zod only at edges" intact without a documented deviation when prompts land in Feature 3. |
+| D24 | **Deploy via Coolify on the Hetzner box** — image pushed to GHCR, Coolify deploys it behind its proxy (TLS there); in-container Caddy keeps owning headers/CSP so ZAP tests the real artifact | ✅ NEW (supersedes §10 "GitHub Actions SSH + compose pull") | hannibyte.com already runs on Coolify there. Open point for Feature 7: landing page (Plausible) and app (zero third-party scripts) cannot share one CSP — per-path header in Caddy or host the landing page on hannibyte.com. |
+| D26 | **Pipeline-emitted pack catalogue + versioned pack contract** — `packs/index.json` lists the packs; every manifest carries `schemaVersion`; strict objects on both sides | ✅ NEW (deep review 2026-09-03) | Removes the triplicated "which packs exist" (pipeline, `main.tsx`, panel labels) and makes "new framework = new pack, zero app changes" true. Strict schemas mean any additive change is a hard break, so `schemaVersion` is the compatibility signal: the app reports `unsupported_version` instead of `invalid`. Written deviation from §8's original layout. |
+| D25 | **EU AI Act ingested from the Publications Office Cellar API**, cited with human-facing EUR-Lex URLs + `#art_N`/`#anx_N` anchors; citation-resolvability verifies the anchor exists in the fetched document | ✅ NEW (Feature 2) | EUR-Lex's HTML front-end answers non-browser clients with an empty HTTP 202 challenge; Cellar (`https://publications.europa.eu/resource/celex/32024R1689`, `Accept: application/xhtml+xml`) serves the same document with the same anchor ids. Fetched over HTTPS and verified against a pinned sha256. Anchor verification is stronger than URL liveness. |
 
 ---
 
@@ -144,31 +150,33 @@ interface Report {
 
 **Prompt registry:** versioned TS assets in `application/prompts/` — `{ id, version, template, schema }`. Content is L2; provider formatting (roles, json_schema vs tool-choice, Anthropic header) is L3.
 
-**Topic maps** ship with packs as data: each topic declares dependent slots + seed retrieval queries. Example (EU AI Act): prohibited-practices screening · risk classification · deployer obligations (Art. 26) · transparency (Art. 50) · GPAI duties · AI literacy (Art. 4).
+**Topic maps** ship with packs as data: each topic declares dependent slots, seed retrieval queries, and **the date its obligations apply from** (`appliesFrom`) — the AI Act phases in (prohibitions 2025-02-02, GPAI 2025-08-02, most obligations incl. Art. 26/50 2026-08-02, Annex I high-risk 2027-08-02); a finding must never cite an obligation not yet in force. Example (EU AI Act): prohibited-practices screening · risk classification · deployer obligations (Art. 26) · transparency (Art. 50) · GPAI duties · AI literacy (Art. 4).
 
 ---
 
 ## 7. Architecture rules (L3/L4 + enforcement)
 
-- **L3 driven adapters:** provider adapters (shared `OpenAiCompatibleBase` covers Mistral/OpenAI/Ollama/custom; Anthropic separate) each owning endpoint, structured-output mechanism, retries/backoff, token accounting, error mapping — all passing one contract suite. `PackLoader` (zod-validates manifest/chunks; fail-closed on corruption) + `Bm25Retriever` (pure TS; Web-Worker-movable behind the port). `IndexedDbAssessmentRepo` (ciphertext+salt+iv only). `InMemoryVault` / `SessionVault`.
+- **L3 driven adapters:** provider adapters (`OpenAiCompatibleGateway`, parameterised by `ProviderSpec`, covers Mistral/OpenAI/Ollama/custom; Anthropic separate, sharing the transport by composition) each owning endpoint, structured-output mechanism, retries/backoff, token accounting, error mapping — all passing one contract suite. `PackLoader` (zod-validates manifest/chunks/crosswalk; sha256 + `schemaVersion` gate; fail-closed on corruption; single `Result` envelope, never rejects) + `Bm25Index` (pure TS; Web-Worker-movable behind the port). `IndexedDbAssessmentRepo` (ciphertext+salt+iv only). `InMemoryVault` / `SessionVault`.
 - **L3 driving adapters:** React hooks (`useInterview`, `useAssessment`, `useReport`) — zero business branching. Presenters: markdown / pdf(print) / json.
 - **L4:** `main.tsx` is the only file that knows concrete classes (manual DI; no container). Packs are **not bundled** — fetched on demand per selected framework. CSP generated at build time from the provider registry.
 - **zod lives only at edges:** LLM responses, pack files, imported assessments. Domain stays dependency-free (plain `asserts` invariants).
-- **Documented deviations (deliberate):** (1) no ViewModel indirection for chat turns — hooks consume use-case events directly; revisit if a second delivery mechanism ships. (2) prompts in L2 not L3 — split is content vs formatting. (3) topic maps/slot registry as pack data — domain owns their types + interpreters.
+- **Documented deviations (deliberate):** (1) no ViewModel indirection for chat turns — hooks consume use-case events directly; revisit if a second delivery mechanism ships. (2) prompts in L2 not L3 — split is content vs formatting. (3) topic maps/slot registry as pack data — domain owns their types + interpreters. (4) **pack catalogue emitted by the pipeline** (`packs/index.json`, D26): the app lists packs from it via `RetrievalPort.listPacks()` and hard-codes no pack ids.
 
 ---
 
 ## 8. Knowledge packs & pipeline
 
 ```
-packs/<framework>/manifest.json   # name, consolidated-version string, source URLs,
-                                  # license note, chunking config, checksum
-                    chunks.json   # [{ id, ref: "Art. 26(1)", title, text, url }]
-                    index.bin     # prebuilt BM25 index
-                    topics.json   # topic map (slots deps + seed queries)
+packs/index.json                  # catalogue: [{ id, framework, name, version, license, chunkCount }] (D26)
+packs/<pack>/manifest.json        # schemaVersion, name, consolidated-version string, pinned sources
+                                  # (url, revision, sha256), license note, sha256 per file
+              chunks.json         # [{ id, ref: "Art. 26(1)", title, text, url }]
+              topics.json         # topic map (slot deps + seed queries + appliesFrom)
+              crosswalk.json      # optional: cross-framework links resolved to chunk ids
 ```
+No prebuilt index (D21): the app builds BM25 in the browser. Sources are pinned by URL + revision + expected sha256 and verified on fetch (deep review 2026-09-03).
 
-Pipeline (`tools/packs/`, Python, containerized): `ingest → normalize → chunk (article/section granularity, stable ref anchors) → link (EUR-Lex/OWASP/NIST deep links) → index → emit(checksum)`. Sources: EUR-Lex (redistributable), OWASP (CC BY-SA), NIST (public). CI job builds packs and runs the app's pack-validation against them; **neither program imports the other** — the pack schema is the only contract (zod + mirrored pydantic).
+Pipeline (`tools/packs/`, Python, containerized): `ingest (fetch-once cache, pinned revisions) → normalize → chunk (article/paragraph/point granularity, stable ref anchors) → link (EUR-Lex/OWASP/NIST deep links) → emit (deterministic JSON + sha256)`; `validate` and `check` (fresh build must be byte-identical to committed packs) are CI gates. Sources: EUR-Lex (redistributable), OWASP (CC BY-SA), NIST (public). CI job builds packs and runs the app's pack-validation against them; **neither program imports the other** — the pack schema is the only contract (zod + mirrored pydantic).
 
 Community extensibility: new framework = new pack + topic map, zero agent-code changes. Pack PRs must pass citation-resolvability CI.
 
@@ -223,7 +231,7 @@ COPY packs/ /srv/packs/
 - `e2e`: app image + mock-provider container + Playwright container.
 - `prod`: the app image alone.
 
-**CI/CD (GitHub Actions):** gates → build image → **publish image digest + build hash** (trust artifact, D18) → push to GHCR → deploy job SSHes to Hetzner, `docker compose pull && up -d`. Rollback = redeploy previous digest.
+**CI/CD (GitHub Actions):** gates → build image **once** (artifact shared by the serve/e2e jobs) → **publish image digest** (trust artifact, D18) → push to GHCR → Coolify deploys the new digest (D24 supersedes the original SSH + `compose pull` plan). Rollback = redeploy previous digest. The container runs unprivileged with a `HEALTHCHECK` so Coolify can gate rollouts.
 
 **Hetzner box:** small CX instance; Docker + compose; Datadog agent on the **host** (containers/CPU/disk + synthetics against the landing page from EU locations + deploy events from CI). Nothing of Datadog in any served byte.
 

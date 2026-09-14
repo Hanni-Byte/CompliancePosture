@@ -15,3 +15,6 @@ app/csp.caddy
 !.zap/rules.tsv
 app/test-results/
 app/playwright-report/
+tools/packs/raw/
+.cache/
+*.egg-info/

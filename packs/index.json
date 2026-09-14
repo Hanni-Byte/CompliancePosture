@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "packs": [
+    {
+      "id": "eu_ai_act",
+      "framework": "EU_AI_ACT",
+      "name": "EU Artificial Intelligence Act — Regulation (EU) 2024/1689",
+      "version": "OJ L, 2024/1689, 12.7.2024",
+      "license": "© European Union, 1998-2024. Reuse authorised under Commission Decision 2011/833/EU; source: EUR-Lex (eur-lex.europa.eu).",
+      "chunkCount": 606
+    },
+    {
+      "id": "owasp_llm_top10",
+      "framework": "OWASP_LLM_TOP_10",
+      "name": "OWASP Top 10 for LLM Applications 2026",
+      "version": "2026 edition (published 2026-08-04; source git 9253e38ade58)",
+      "license": "OWASP Top 10 for LLM Applications 2026 © OWASP Foundation / OWASP GenAI Security Project, CC BY-SA 4.0. Crosswalk: OWASP GenAI Security Crosswalk © 2026 OWASP GenAI Data Security Initiative, CC BY-SA 4.0.",
+      "chunkCount": 41
+    }
+  ]
+}

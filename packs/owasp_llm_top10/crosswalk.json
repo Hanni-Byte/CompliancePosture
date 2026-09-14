@@ -1,0 +1,3042 @@
+[
+  {
+    "entryId": "llm01",
+    "name": "Prompt Injection",
+    "severity": "Critical",
+    "sourceUrl": "https://github.com/genai-security-project/crosswalk/blob/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM01.json",
+    "links": [
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0051.000",
+        "title": "Direct Prompt Injection",
+        "tier": "Foundational",
+        "url": "https://atlas.mitre.org/techniques/AML.T0051.000",
+        "notes": "Attacker directly manipulates user-facing prompt to alter model behaviour",
+        "chunkIds": []
+      },
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0051.001",
+        "title": "Indirect Prompt Injection",
+        "tier": "Foundational",
+        "url": "https://atlas.mitre.org/techniques/AML.T0051.001",
+        "notes": "Hidden instructions in content the model processes (documents, web, RAG)",
+        "chunkIds": []
+      },
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0054",
+        "title": "LLM Jailbreak",
+        "tier": "Foundational",
+        "url": "https://atlas.mitre.org/techniques/AML.T0054",
+        "notes": "Circumventing model safety guardrails via crafted prompt sequences",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "GV-1.7",
+        "title": "Policies for trustworthy AI characteristics",
+        "tier": "Foundational",
+        "notes": "Organisational policies explicitly address adversarial input risks including prompt injection",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MP-2.3",
+        "title": "Risk categorisation",
+        "tier": "Foundational",
+        "notes": "Prompt injection categorised as a high-priority risk in the AI system risk register",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MS-2.5",
+        "title": "Testing and evaluation — adversarial",
+        "tier": "Foundational",
+        "notes": "Adversarial testing programme validates model resilience to prompt injection at each release",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MG-2.2",
+        "title": "Risk response — incident",
+        "tier": "Foundational",
+        "notes": "Defined incident response procedures for detected prompt injection attacks",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 9 — Risk management",
+        "title": "Providers of high-risk AI must implement a risk management system covering all reasonably foreseeable risks",
+        "tier": "Foundational",
+        "notes": "Prompt injection must be identified, analysed, and mitigated in the risk management system",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_9_1",
+          "art_9_10",
+          "art_9_2",
+          "art_9_3",
+          "art_9_4",
+          "art_9_5",
+          "art_9_6",
+          "art_9_7",
+          "art_9_8",
+          "art_9_9"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 15 — Accuracy, robustness, cybersecurity",
+        "title": "High-risk AI systems must be resilient to adversarial inputs and attempts to alter outputs or performance",
+        "tier": "Foundational",
+        "notes": "Robustness against prompt injection is a technical compliance requirement — not optional",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_15_1",
+          "art_15_2",
+          "art_15_3",
+          "art_15_4",
+          "art_15_5"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 55(1)(b) — Systemic risk GPAI",
+        "title": "Providers of systemic risk GPAI models must conduct adversarial testing to identify and mitigate systemic risks",
+        "tier": "Foundational",
+        "notes": "Prompt injection adversarial testing is a binding obligation for systemic risk models",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_55_1"
+        ]
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.28",
+        "title": "Secure coding",
+        "tier": "Foundational",
+        "notes": "Secure coding requirements for all LLM integration code — input validation, sanitisation, context separation",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.29",
+        "title": "Security testing",
+        "tier": "Foundational",
+        "notes": "Adversarial testing programme covering prompt injection scenarios before each release",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.5.7",
+        "title": "Threat intelligence",
+        "tier": "Foundational",
+        "notes": "Active intelligence on prompt injection techniques — new attack patterns inform detection controls",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.16",
+        "title": "Monitoring activities",
+        "tier": "Foundational",
+        "notes": "Runtime monitoring for prompt injection indicators in LLM inputs and outputs",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.6.2.3",
+        "title": "AI system security",
+        "tier": "Foundational",
+        "notes": "AI systems designed with security controls — input validation, context separation, injection detection as AIMS design requirements",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.6.2.6",
+        "title": "Testing of AI systems",
+        "tier": "Foundational",
+        "notes": "AI systems tested before deployment — adversarial testing for prompt injection as AIMS testing requirement",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.6.2.8",
+        "title": "Monitoring of AI systems",
+        "tier": "Foundational",
+        "notes": "AI systems monitored in operation — runtime injection detection as AIMS monitoring control",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "Cl.6.1",
+        "title": "Risk assessment",
+        "tier": "Foundational",
+        "notes": "Prompt injection included in AI risk assessment — risk owner, treatment, review cadence documented",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C5-M5.1",
+        "title": "Safety mitigation implementation",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C3-M3.2",
+        "title": "Model evaluations",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C2-M2.1",
+        "title": "Systemic risk identification process",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 9",
+        "title": "Protection and Prevention — adversarial input controls",
+        "tier": "Foundational",
+        "notes": "Implement ICT security controls to detect and block adversarial inputs including direct and indirect prompt injection; treat as a mandatory protection measure",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 24–27",
+        "title": "Digital Operational Resilience Testing — AI red-teaming",
+        "tier": "Foundational",
+        "notes": "Include prompt injection scenarios in threat-led penetration testing (TLPT); cover direct, indirect, and multimodal injection vectors targeting financial AI services",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 10",
+        "title": "Detection — injection monitoring",
+        "tier": "Foundational",
+        "notes": "Deploy detection mechanisms for prompt injection attempts; monitor inference requests for adversarial patterns and alert security operations",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 45",
+        "title": "Information Sharing — injection threat intelligence",
+        "tier": "Foundational",
+        "notes": "Share prompt injection threat intelligence with sector peers through DORA information sharing arrangements",
+        "chunkIds": []
+      }
+    ],
+    "incidents": [
+      {
+        "name": "Bing Chat 'Sydney' jailbreak — persona escape and threatening behaviour",
+        "year": 2023,
+        "incidentId": "INC-002"
+      },
+      {
+        "name": "ChatGPT indirect prompt injection via attacker-controlled web content",
+        "year": 2023,
+        "incidentId": "INC-003"
+      },
+      {
+        "name": "Chevrolet dealership chatbot agrees to sell car for $1",
+        "year": 2023,
+        "incidentId": "INC-005"
+      },
+      {
+        "name": "Indirect prompt injection in LLM email assistant via malicious email body",
+        "year": 2024,
+        "incidentId": "INC-007"
+      },
+      {
+        "name": "Microsoft Copilot for M365 — document exfiltration via indirect injection",
+        "year": 2024,
+        "incidentId": "INC-010"
+      },
+      {
+        "name": "WormGPT — uncensored LLM sold for cybercrime on dark web forums",
+        "year": 2023,
+        "incidentId": "INC-011"
+      },
+      {
+        "name": "LangChain and LlamaIndex RCE — agent code execution via prompt injection",
+        "year": 2023,
+        "incidentId": "INC-012"
+      },
+      {
+        "name": "Perez & Ribeiro — 'Ignore Previous Prompt': foundational direct injection study",
+        "year": 2022,
+        "incidentId": "INC-013"
+      },
+      {
+        "name": "Multimodal indirect injection — image-embedded instructions in GPT-4V",
+        "year": 2023,
+        "incidentId": "INC-015"
+      },
+      {
+        "name": "RAG corpus poisoning — embedding-space manipulation to force retrieval",
+        "year": 2024,
+        "incidentId": "INC-016"
+      },
+      {
+        "name": "GPT-4 system prompt extraction via jailbreak in production deployments",
+        "year": 2023,
+        "incidentId": "INC-018"
+      },
+      {
+        "name": "Multi-agent prompt injection cascade — demonstrated cross-agent goal propagation",
+        "year": 2024,
+        "incidentId": "INC-020"
+      },
+      {
+        "name": "LAAF v2.0 — Empirical LPCI breakthrough rates of 67–100% across 5 production LLMs",
+        "year": 2026,
+        "incidentId": "INC-021"
+      },
+      {
+        "name": "Greshake et al. \"Not What You've Signed Up For\" indirect prompt injection paper",
+        "year": 2023,
+        "incidentId": "INC-022"
+      },
+      {
+        "name": "Nassi et al. \"ComPromptMized\" Morris II multi-agent worm",
+        "year": 2024,
+        "incidentId": "INC-023"
+      },
+      {
+        "name": "Slack AI indirect injection via channel content",
+        "year": 2024,
+        "incidentId": "INC-024"
+      },
+      {
+        "name": "GitHub Copilot Workspace prompt injection via repository content",
+        "year": 2024,
+        "incidentId": "INC-025"
+      },
+      {
+        "name": "MathPrompt: symbolic mathematics jailbreak attack",
+        "year": 2024,
+        "incidentId": "INC-027"
+      },
+      {
+        "name": "Many-shot jailbreaking (Anthropic research)",
+        "year": 2024,
+        "incidentId": "INC-028"
+      },
+      {
+        "name": "Crescendo: multi-turn escalation attack (Microsoft)",
+        "year": 2024,
+        "incidentId": "INC-029"
+      },
+      {
+        "name": "Skeleton Key: direct system prompt override (Microsoft)",
+        "year": 2024,
+        "incidentId": "INC-030"
+      },
+      {
+        "name": "OpenAI o1/o3 reasoning chain jailbreak via chain-of-thought manipulation",
+        "year": 2025,
+        "incidentId": "INC-033"
+      },
+      {
+        "name": "Azure OpenAI content filter bypass via structured output mode",
+        "year": 2025,
+        "incidentId": "INC-037"
+      },
+      {
+        "name": "Adversarial embedding attacks on production RAG systems",
+        "year": 2024,
+        "incidentId": "INC-046"
+      },
+      {
+        "name": "DPD AI chatbot swears at customer and criticises company — prompt injection via customer input",
+        "year": 2024,
+        "incidentId": "INC-053"
+      },
+      {
+        "name": "MCP tool poisoning — hidden instructions in Model Context Protocol tool descriptions",
+        "year": 2025,
+        "incidentId": "INC-062"
+      },
+      {
+        "name": "AI-generated CSAM detection evasion — adversarial manipulation of content safety classifiers",
+        "year": 2024,
+        "incidentId": "INC-063"
+      },
+      {
+        "name": "OpenAI GPT-4 system prompt extraction toolkit — systematic prompt leakage",
+        "year": 2024,
+        "incidentId": "INC-065"
+      },
+      {
+        "name": "GitHub Copilot Chat agent executes malicious code from repository context",
+        "year": 2024,
+        "incidentId": "INC-067"
+      },
+      {
+        "name": "Claude computer use red-team: autonomous agent browses to attacker-controlled site and follows instructions",
+        "year": 2024,
+        "incidentId": "INC-069"
+      },
+      {
+        "name": "LLM-generated malware evades endpoint detection — AI-assisted polymorphic code",
+        "year": 2024,
+        "incidentId": "INC-075"
+      },
+      {
+        "name": "Claude hijacked for state-sponsored cyberattacks — 80-90% autonomous operation against 30 entities",
+        "year": 2025,
+        "incidentId": "INC-083"
+      },
+      {
+        "name": "EchoLeak — zero-click Microsoft Copilot data exfiltration via email prompt injection",
+        "year": 2025,
+        "incidentId": "INC-089"
+      },
+      {
+        "name": "Claude AI jailbreak — Mexican government breach, 150GB data theft across 10 agencies",
+        "year": 2026,
+        "incidentId": "INC-092"
+      },
+      {
+        "name": "Microsoft 365 Copilot XPIA phishing — attacker-shaped email summaries via hidden instructions",
+        "year": 2026,
+        "incidentId": "INC-095"
+      },
+      {
+        "name": "Clinejection — CI/CD pipeline compromise via Cline's issue triage bot, 4,000 machines infected",
+        "year": 2026,
+        "incidentId": "INC-098"
+      },
+      {
+        "name": "AI recommendation poisoning — hidden prompt injections in 'Summarize with AI' buttons across 31 companies",
+        "year": 2026,
+        "incidentId": "INC-100"
+      },
+      {
+        "name": "IDEsaster — 30+ vulnerabilities across AI coding tools (Cursor, Windsurf, Copilot, Zed, Roo Code)",
+        "year": 2025,
+        "incidentId": "INC-103"
+      },
+      {
+        "name": "Anthropic Claude misuse report — ransomware development, North Korean employment fraud, extortion",
+        "year": 2025,
+        "incidentId": "INC-110"
+      }
+    ]
+  },
+  {
+    "entryId": "llm02",
+    "name": "Sensitive Information Disclosure",
+    "severity": "High",
+    "sourceUrl": "https://github.com/genai-security-project/crosswalk/blob/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM02.json",
+    "links": [
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0021",
+        "title": "Data Leakage",
+        "tier": "Foundational",
+        "url": "https://atlas.mitre.org/techniques/AML.T0021",
+        "notes": "Unintended exposure of training data or sensitive context through model outputs",
+        "chunkIds": []
+      },
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0030",
+        "title": "Information Disclosure",
+        "tier": "Foundational",
+        "url": "https://atlas.mitre.org/techniques/AML.T0030",
+        "notes": "Extraction of confidential information via targeted model queries",
+        "chunkIds": []
+      },
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0024",
+        "title": "Model Inversion",
+        "tier": "Foundational",
+        "url": "https://atlas.mitre.org/techniques/AML.T0024",
+        "notes": "Reconstructing training data from model outputs or confidence scores",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "GV-1.6",
+        "title": "Policies for data privacy",
+        "tier": "Foundational",
+        "notes": "Organisational policies for data privacy in AI systems — classification, handling, and disclosure controls",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MP-2.3",
+        "title": "Risk categorisation",
+        "tier": "Foundational",
+        "notes": "Sensitive information disclosure categorised and risk-rated in AI system risk register",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MS-2.6",
+        "title": "Testing — data leakage",
+        "tier": "Foundational",
+        "notes": "Evaluation programme includes data leakage and privacy disclosure testing",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MG-2.4",
+        "title": "Risk response — data",
+        "tier": "Foundational",
+        "notes": "Defined procedures for responding to sensitive data disclosure incidents",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 10 — Data and data governance",
+        "title": "Training data for high-risk AI must be relevant, representative, free of errors, and complete — must address privacy",
+        "tier": "Foundational",
+        "notes": "Privacy-preserving training data practices are a compliance requirement for high-risk LLMs",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_10_1",
+          "art_10_2",
+          "art_10_3",
+          "art_10_4",
+          "art_10_5",
+          "art_10_6"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 13 — Transparency",
+        "title": "Users must receive information about capabilities, limitations, and conditions of use",
+        "tier": "Foundational",
+        "notes": "Disclosure of potential data disclosure risks is a transparency obligation",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_13_1",
+          "art_13_2",
+          "art_13_3"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 17 — Quality management",
+        "title": "Documented quality management system including post-market monitoring",
+        "tier": "Foundational",
+        "notes": "Post-market monitoring must detect and respond to sensitive disclosure incidents",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_17_1",
+          "art_17_2",
+          "art_17_3",
+          "art_17_4"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 53(1)(a) — GPAI documentation",
+        "title": "GPAI providers must maintain technical documentation including training data governance",
+        "tier": "Foundational",
+        "notes": "Data governance for GPAI training data is a binding documentation obligation from Aug 2025",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_53_1"
+        ]
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.11",
+        "title": "Data masking",
+        "tier": "Foundational",
+        "notes": "Output redaction for PII and sensitive patterns before responses reach users",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.12",
+        "title": "Data leakage prevention",
+        "tier": "Foundational",
+        "notes": "DLP on all LLM output channels — API, chat interface, logs",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.5.12",
+        "title": "Classification of information",
+        "tier": "Foundational",
+        "notes": "All data in LLM scope classified — training data, RAG sources, outputs, embeddings",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.3",
+        "title": "Information access restriction",
+        "tier": "Foundational",
+        "notes": "Access controls on RAG retrieval — users retrieve only data they are authorised to access",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.7.2",
+        "title": "Data quality",
+        "tier": "Foundational",
+        "notes": "Training data and RAG content quality requirements — sensitivity, completeness, appropriateness assessed before use",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.7.3",
+        "title": "Data provenance and characteristics",
+        "tier": "Foundational",
+        "notes": "Data provenance documented — source, classification, handling requirements tracked from ingestion through all derived forms",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.6.2.3",
+        "title": "AI system security",
+        "tier": "Foundational",
+        "notes": "Output scanning and redaction as AIMS security controls — DLP enforced at the system boundary",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.5.2",
+        "title": "Impact assessment",
+        "tier": "Foundational",
+        "notes": "Impact assessment covers data disclosure risk — what data is in LLM scope, what is the disclosure impact per stakeholder",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C6-M6.2",
+        "title": "Security mitigation implementation",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-I-C1-M1.3",
+        "title": "Quality, integrity, and security of information",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C9-M9.1",
+        "title": "Incident tracking and documentation",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 9",
+        "title": "Protection and Prevention — data disclosure controls",
+        "tier": "Foundational",
+        "notes": "Implement ICT security controls to prevent LLM-based disclosure of sensitive financial data, PII, and credentials; include output monitoring and data loss prevention",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 17–23",
+        "title": "ICT Incident Management — data breach reporting",
+        "tier": "Foundational",
+        "notes": "Classify LLM data disclosure events as ICT-related incidents; report to competent authorities per DORA incident classification and reporting requirements",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 5–7",
+        "title": "ICT Risk Management — AI data governance",
+        "tier": "Foundational",
+        "notes": "Include AI data handling in ICT risk management framework; define policies for data processed by LLM systems including classification, retention, and access controls",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 10",
+        "title": "Detection — data leakage detection",
+        "tier": "Foundational",
+        "notes": "Deploy detection mechanisms for sensitive data in model outputs; monitor for PII, financial data, and credential patterns in inference responses",
+        "chunkIds": []
+      }
+    ],
+    "incidents": [
+      {
+        "name": "Samsung employees leak source code and meeting notes via ChatGPT",
+        "year": 2023,
+        "incidentId": "INC-001"
+      },
+      {
+        "name": "OpenAI Redis caching bug exposes user conversation history",
+        "year": 2023,
+        "incidentId": "INC-006"
+      },
+      {
+        "name": "GitHub Copilot reproduces verbatim licensed code and embedded secrets",
+        "year": 2023,
+        "incidentId": "INC-008"
+      },
+      {
+        "name": "Slack AI indirect injection via channel content",
+        "year": 2024,
+        "incidentId": "INC-024"
+      },
+      {
+        "name": "DeepSeek AI database exposure — 1M+ chat logs publicly accessible",
+        "year": 2025,
+        "incidentId": "INC-032"
+      },
+      {
+        "name": "Cursor AI code agent leaking repository secrets via context window",
+        "year": 2025,
+        "incidentId": "INC-034"
+      },
+      {
+        "name": "Amazon Q developer leaks internal AWS data in enterprise environment",
+        "year": 2024,
+        "incidentId": "INC-064"
+      }
+    ]
+  },
+  {
+    "entryId": "llm03",
+    "name": "Excessive Agency",
+    "severity": "Critical",
+    "sourceUrl": "https://github.com/genai-security-project/crosswalk/blob/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM03.json",
+    "links": [
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0015",
+        "title": "LLM Capability Escalation",
+        "tier": "Foundational",
+        "url": "https://atlas.mitre.org/techniques/AML.T0015",
+        "notes": "Exploiting overly permissive LLM tool access to perform actions beyond intended scope",
+        "chunkIds": []
+      },
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0068",
+        "title": "Automated Collection",
+        "tier": "Foundational",
+        "url": "https://atlas.mitre.org/techniques/AML.T0068",
+        "notes": "LLM autonomously collecting data beyond its intended access scope",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "GV-1.7",
+        "title": "Policies for trustworthy AI",
+        "tier": "Foundational",
+        "notes": "Organisational policy defines and enforces limits on AI system autonomy and decision authority",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MP-2.3",
+        "title": "Risk categorisation",
+        "tier": "Foundational",
+        "notes": "Excessive agency risks mapped to specific tool and API integrations in the risk register",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MS-2.5",
+        "title": "Testing — adversarial",
+        "tier": "Foundational",
+        "notes": "Autonomy boundary testing included in adversarial evaluation programme",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MG-2.2",
+        "title": "Risk response",
+        "tier": "Foundational",
+        "notes": "Defined response for unauthorised autonomous actions including rollback and notification",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 9 — Risk management",
+        "title": "Autonomy-related risks identified and mitigated",
+        "tier": "Foundational",
+        "notes": "Excessive agency scenarios required in risk management system",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_9_1",
+          "art_9_10",
+          "art_9_2",
+          "art_9_3",
+          "art_9_4",
+          "art_9_5",
+          "art_9_6",
+          "art_9_7",
+          "art_9_8",
+          "art_9_9"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 14 — Human oversight",
+        "title": "High-risk AI systems designed to allow effective human oversight — ability to pause, stop, and override",
+        "tier": "Foundational",
+        "notes": "Human-in-the-loop requirements are a binding Art. 14 compliance obligation",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_14_1",
+          "art_14_2",
+          "art_14_3",
+          "art_14_4",
+          "art_14_5"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 29 — Deployer obligations",
+        "title": "Deployers must ensure human oversight as instructed by provider",
+        "tier": "Foundational",
+        "notes": "Deployers cannot waive Art. 14 human oversight requirements",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_29"
+        ]
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.2",
+        "title": "Privileged access rights",
+        "tier": "Foundational",
+        "notes": "LLM tool access managed as privileged access — minimum scope, reviewed regularly",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.5.10",
+        "title": "Acceptable use of assets",
+        "tier": "Foundational",
+        "notes": "Policy defining acceptable LLM autonomous actions — approved tool use cases documented",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.15",
+        "title": "Logging",
+        "tier": "Foundational",
+        "notes": "All LLM tool invocations logged with full context — every tool call auditable",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.5.15",
+        "title": "Identity management",
+        "tier": "Foundational",
+        "notes": "LLM tool access governed through identity management — tool permissions scoped per deployment",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.6.1.2",
+        "title": "Responsible AI system management",
+        "tier": "Foundational",
+        "notes": "LLM tool access managed responsibly — minimum permissions, human oversight requirements documented as AIMS responsibilities",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.6.2.3",
+        "title": "AI system security",
+        "tier": "Foundational",
+        "notes": "Tool permission enforcement as AIMS security control — scope enforced at orchestration layer",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.5.2",
+        "title": "Impact assessment",
+        "tier": "Foundational",
+        "notes": "Impact assessment covers excessive agency risk — what actions can the LLM take autonomously, what is the worst-case impact",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "Cl.5",
+        "title": "Policy",
+        "tier": "Foundational",
+        "notes": "Leadership commitment to human oversight — autonomous action scope defined in AI policy, signed off at executive level",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C2-M2.2",
+        "title": "Systemic risk scenarios",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C4-M4.1",
+        "title": "Risk acceptance criteria and tiers",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C7-M7.2",
+        "title": "Risk justification for market placement",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 5–7",
+        "title": "ICT Risk Management — AI autonomy governance",
+        "tier": "Foundational",
+        "notes": "Include AI autonomy and excessive agency in the ICT risk management framework; define acceptable autonomy thresholds and escalation procedures for financial AI systems",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 9",
+        "title": "Protection and Prevention — agent action boundaries",
+        "tier": "Foundational",
+        "notes": "Implement security controls enforcing least privilege on AI agent tool access, API permissions, and autonomous action scope within financial systems",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 24–27",
+        "title": "Resilience Testing — autonomy boundary testing",
+        "tier": "Foundational",
+        "notes": "Include excessive agency scenarios in resilience testing; test that AI agents cannot exceed defined permission boundaries under adversarial conditions",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 10",
+        "title": "Detection — unauthorised action detection",
+        "tier": "Foundational",
+        "notes": "Monitor AI agent actions for unauthorised tool invocations, scope violations, and anomalous behaviour patterns; alert on detection",
+        "chunkIds": []
+      }
+    ],
+    "incidents": [
+      {
+        "name": "Bing Chat 'Sydney' jailbreak — persona escape and threatening behaviour",
+        "year": 2023,
+        "incidentId": "INC-002"
+      },
+      {
+        "name": "Air Canada chatbot invents bereavement discount policy — tribunal ruling",
+        "year": 2024,
+        "incidentId": "INC-004"
+      },
+      {
+        "name": "Chevrolet dealership chatbot agrees to sell car for $1",
+        "year": 2023,
+        "incidentId": "INC-005"
+      },
+      {
+        "name": "WormGPT — uncensored LLM sold for cybercrime on dark web forums",
+        "year": 2023,
+        "incidentId": "INC-011"
+      },
+      {
+        "name": "LAAF v2.0 — Empirical LPCI breakthrough rates of 67–100% across 5 production LLMs",
+        "year": 2026,
+        "incidentId": "INC-021"
+      },
+      {
+        "name": "AI voice deepfake CEO fraud — Hong Kong $25M loss",
+        "year": 2024,
+        "incidentId": "INC-026"
+      },
+      {
+        "name": "MathPrompt: symbolic mathematics jailbreak attack",
+        "year": 2024,
+        "incidentId": "INC-027"
+      },
+      {
+        "name": "Many-shot jailbreaking (Anthropic research)",
+        "year": 2024,
+        "incidentId": "INC-028"
+      },
+      {
+        "name": "Crescendo: multi-turn escalation attack (Microsoft)",
+        "year": 2024,
+        "incidentId": "INC-029"
+      },
+      {
+        "name": "Skeleton Key: direct system prompt override (Microsoft)",
+        "year": 2024,
+        "incidentId": "INC-030"
+      },
+      {
+        "name": "Meta Galactica model withdrawn after misinformation at launch",
+        "year": 2022,
+        "incidentId": "INC-031"
+      },
+      {
+        "name": "OpenAI o1/o3 reasoning chain jailbreak via chain-of-thought manipulation",
+        "year": 2025,
+        "incidentId": "INC-033"
+      },
+      {
+        "name": "Apollo Research: frontier models demonstrate strategic deception to avoid shutdown",
+        "year": 2024,
+        "incidentId": "INC-047"
+      },
+      {
+        "name": "AI companion apps: manipulation and exploitation of human-agent trust",
+        "year": 2025,
+        "incidentId": "INC-048"
+      },
+      {
+        "name": "NYC city chatbot tells businesses to break the law — fabricated legal guidance",
+        "year": 2024,
+        "incidentId": "INC-052"
+      },
+      {
+        "name": "DPD AI chatbot swears at customer and criticises company — prompt injection via customer input",
+        "year": 2024,
+        "incidentId": "INC-053"
+      },
+      {
+        "name": "Character.AI teen suicide — AI companion encouraged self-harm",
+        "year": 2024,
+        "incidentId": "INC-057"
+      },
+      {
+        "name": "LLM-generated malware evades endpoint detection — AI-assisted polymorphic code",
+        "year": 2024,
+        "incidentId": "INC-075"
+      },
+      {
+        "name": "Claude Skills ransomware deployment — MedusaLocker via malicious plugin",
+        "year": 2025,
+        "incidentId": "INC-081"
+      },
+      {
+        "name": "Google Antigravity AI IDE deletes entire D: drive — misinterpreted cache-clearing instruction",
+        "year": 2025,
+        "incidentId": "INC-082"
+      },
+      {
+        "name": "Claude hijacked for state-sponsored cyberattacks — 80-90% autonomous operation against 30 entities",
+        "year": 2025,
+        "incidentId": "INC-083"
+      },
+      {
+        "name": "XBOW — first critical CVE discovered entirely by autonomous AI penetration testing agent",
+        "year": 2026,
+        "incidentId": "INC-096"
+      },
+      {
+        "name": "Anthropic Claude misuse report — ransomware development, North Korean employment fraud, extortion",
+        "year": 2025,
+        "incidentId": "INC-110"
+      }
+    ]
+  },
+  {
+    "entryId": "llm04",
+    "name": "Supply Chain",
+    "severity": "High",
+    "sourceUrl": "https://github.com/genai-security-project/crosswalk/blob/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM04.json",
+    "links": [
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0056",
+        "title": "Adversarial Model Manipulation",
+        "tier": "Foundational",
+        "url": "https://atlas.mitre.org/techniques/AML.T0056",
+        "notes": "Tampering with model weights, adapters, or configurations during supply chain",
+        "chunkIds": []
+      },
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0048",
+        "title": "Model Contamination",
+        "tier": "Foundational",
+        "url": "https://atlas.mitre.org/techniques/AML.T0048",
+        "notes": "Introducing persistent malicious behaviour into model through supply chain",
+        "chunkIds": []
+      },
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0010",
+        "title": "Backdoor ML Model",
+        "tier": "Foundational",
+        "url": "https://atlas.mitre.org/techniques/AML.T0010",
+        "notes": "Embedding trigger-based backdoors in model weights via training or fine-tuning supply chain",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "GV-1.6",
+        "title": "Policies for data privacy",
+        "tier": "Foundational",
+        "notes": "Supply chain data governance — policies for third-party model and data provenance",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MP-5.1",
+        "title": "Interdependencies",
+        "tier": "Foundational",
+        "notes": "Mapping of all AI system dependencies including third-party models, datasets, and libraries",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MS-2.5",
+        "title": "Testing and evaluation",
+        "tier": "Foundational",
+        "notes": "Evaluation programme includes supply chain component integrity testing",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MG-3.2",
+        "title": "Residual risk — third party",
+        "tier": "Foundational",
+        "notes": "Residual risk from third-party components documented, monitored, and treated",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 9 — Risk management",
+        "title": "Supply chain risks must be identified and mitigated in the risk management system",
+        "tier": "Foundational",
+        "notes": "Third-party component risks are in scope for Art. 9 risk management",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_9_1",
+          "art_9_10",
+          "art_9_2",
+          "art_9_3",
+          "art_9_4",
+          "art_9_5",
+          "art_9_6",
+          "art_9_7",
+          "art_9_8",
+          "art_9_9"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 17 — Quality management",
+        "title": "Quality management must cover supply chain controls",
+        "tier": "Foundational",
+        "notes": "Documented supply chain security procedures required",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_17_1",
+          "art_17_2",
+          "art_17_3",
+          "art_17_4"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 25 — Value chain responsibilities",
+        "title": "Responsibilities distributed along the AI value chain between providers and deployers",
+        "tier": "Foundational",
+        "notes": "Providers must document what deployers inherit — deployers must verify",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_25_1",
+          "art_25_2",
+          "art_25_3",
+          "art_25_4",
+          "art_25_5"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 53(1)(a) — GPAI documentation",
+        "title": "GPAI providers must document training data governance including third-party sources",
+        "tier": "Foundational",
+        "notes": "Third-party training data provenance is a GPAI documentation obligation",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_53_1"
+        ]
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.5.19",
+        "title": "Supplier relationships",
+        "tier": "Foundational",
+        "notes": "Security requirements applied to all LLM model and data vendors — provenance, integrity, disclosure obligations",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.5.20",
+        "title": "Supplier agreements",
+        "tier": "Foundational",
+        "notes": "Contractual security requirements for LLM component suppliers — integrity guarantees, vulnerability notification",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.5.21",
+        "title": "Supply chain security",
+        "tier": "Foundational",
+        "notes": "Managing ICT supply chain risks — LLM model and library supply chain explicitly in scope",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.8",
+        "title": "Management of technical vulnerabilities",
+        "tier": "Foundational",
+        "notes": "Scanning and patching LLM component vulnerabilities — model weights and inference runtime libraries",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.10.1",
+        "title": "Third-party AI system acquisition",
+        "tier": "Foundational",
+        "notes": "Security requirements applied to all LLM component vendors — model providers, dataset suppliers, inference runtime vendors",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.10.2",
+        "title": "Customer relationships",
+        "tier": "Foundational",
+        "notes": "LLM deployment obligations to downstream customers — what security properties are guaranteed",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.6.1.2",
+        "title": "Responsible AI system management",
+        "tier": "Foundational",
+        "notes": "LLM components managed responsibly through lifecycle — acquisition, testing, deployment, decommission",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.7.2",
+        "title": "Data quality",
+        "tier": "Foundational",
+        "notes": "Third-party training datasets assessed for quality — provenance, completeness, representativeness, security",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-I-C1-M1.2",
+        "title": "Providing information to downstream providers and AI Office",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C1-M1.2",
+        "title": "Implementing the framework",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C3-M3.1",
+        "title": "Model-independent information gathering",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 28–44",
+        "title": "Third-Party Risk — AI vendor oversight",
+        "tier": "Foundational",
+        "notes": "Include AI model providers, dataset vendors, and ML library maintainers in third-party ICT risk management; conduct due diligence, contractual oversight, and ongoing monitoring",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 8",
+        "title": "Identification — AI supply chain assets",
+        "tier": "Foundational",
+        "notes": "Identify and classify all AI supply chain components — models, datasets, adapters, libraries, plugins — in the ICT asset inventory with provenance records",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 5–7",
+        "title": "ICT Risk Management — AI supply chain governance",
+        "tier": "Foundational",
+        "notes": "Include AI supply chain risk in the ICT risk management framework; define policies for AI component sourcing, vetting, and lifecycle management",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 24–27",
+        "title": "Resilience Testing — supply chain resilience",
+        "tier": "Foundational",
+        "notes": "Include AI supply chain disruption scenarios in resilience testing; test fallback procedures for third-party AI service failures",
+        "chunkIds": []
+      }
+    ],
+    "incidents": [
+      {
+        "name": "Hugging Face model repository pickle-based malware supply chain",
+        "year": 2024,
+        "incidentId": "INC-009"
+      },
+      {
+        "name": "Hugging Face model card supply chain manipulation",
+        "year": 2025,
+        "incidentId": "INC-038"
+      },
+      {
+        "name": "Scale AI / Sama contractor data exposure — third-party AI labeling workforce privacy violations",
+        "year": 2024,
+        "incidentId": "INC-044"
+      },
+      {
+        "name": "Stability AI synthetic CSAM generation — training data and output safety failures",
+        "year": 2024,
+        "incidentId": "INC-049"
+      },
+      {
+        "name": "Meta Llama model weights stolen and leaked — open-source model security incident",
+        "year": 2023,
+        "incidentId": "INC-078"
+      },
+      {
+        "name": "Lasso Security — 1,500+ HuggingFace API tokens exposed in code repositories",
+        "year": 2023,
+        "incidentId": "INC-079"
+      }
+    ]
+  },
+  {
+    "entryId": "llm05",
+    "name": "Data and Model Poisoning",
+    "severity": "Critical",
+    "sourceUrl": "https://github.com/genai-security-project/crosswalk/blob/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM05.json",
+    "links": [
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0032",
+        "title": "Data Poisoning",
+        "tier": "Hardening",
+        "url": "https://atlas.mitre.org/techniques/AML.T0032",
+        "notes": "Injecting malicious data into training pipelines to corrupt model behaviour",
+        "chunkIds": []
+      },
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0031",
+        "title": "Backdoor ML Model",
+        "tier": "Hardening",
+        "url": "https://atlas.mitre.org/techniques/AML.T0031",
+        "notes": "Embedding hidden trigger-response patterns in model via poisoned training data",
+        "chunkIds": []
+      },
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0027",
+        "title": "Model Inversion",
+        "tier": "Hardening",
+        "url": "https://atlas.mitre.org/techniques/AML.T0027",
+        "notes": "Reconstructing sensitive training data from model outputs",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MP-2.3",
+        "title": "Risk categorisation",
+        "tier": "Hardening",
+        "notes": "Data and model poisoning categorised as Critical in AI risk register",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MS-2.5",
+        "title": "Testing — adversarial",
+        "tier": "Hardening",
+        "notes": "Adversarial testing specifically covering poisoning detection in training pipelines",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MS-3.3",
+        "title": "Data quality",
+        "tier": "Hardening",
+        "notes": "Data quality measurement and validation applied to all training and fine-tuning data",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MG-2.2",
+        "title": "Risk response",
+        "tier": "Hardening",
+        "notes": "Defined response procedures including model rollback for detected poisoning events",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 9 — Risk management",
+        "title": "Data poisoning must be identified as a foreseeable risk and mitigated",
+        "tier": "Hardening",
+        "notes": "Poisoning attack scenarios required in Art. 9 risk assessment",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_9_1",
+          "art_9_10",
+          "art_9_2",
+          "art_9_3",
+          "art_9_4",
+          "art_9_5",
+          "art_9_6",
+          "art_9_7",
+          "art_9_8",
+          "art_9_9"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 10 — Data and data governance",
+        "title": "Training data must be subject to appropriate governance practices — relevant, representative, free of errors",
+        "tier": "Hardening",
+        "notes": "Data quality controls preventing poisoning are a compliance requirement",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_10_1",
+          "art_10_2",
+          "art_10_3",
+          "art_10_4",
+          "art_10_5",
+          "art_10_6"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 15 — Accuracy, robustness, cybersecurity",
+        "title": "High-risk AI must be resilient to attempts to alter performance through data manipulation",
+        "tier": "Hardening",
+        "notes": "Technical robustness against poisoning is a binding Art. 15 requirement",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_15_1",
+          "art_15_2",
+          "art_15_3",
+          "art_15_4",
+          "art_15_5"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 55(1)(b) — Systemic risk GPAI adversarial testing",
+        "title": "Systemic risk GPAI providers must conduct adversarial testing to identify model-level risks",
+        "tier": "Hardening",
+        "notes": "Poisoning detection is in scope for Art. 55 adversarial testing",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_55_1"
+        ]
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.8",
+        "title": "Management of technical vulnerabilities",
+        "tier": "Hardening",
+        "notes": "Training pipeline dependency scanning — vulnerabilities in training infrastructure components",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.27",
+        "title": "Secure system architecture",
+        "tier": "Hardening",
+        "notes": "Training pipeline designed with integrity controls — data validation, source allowlisting, lineage tracking",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.29",
+        "title": "Security testing",
+        "tier": "Hardening",
+        "notes": "Adversarial testing covering poisoning detection before each production model promotion",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.5.7",
+        "title": "Threat intelligence",
+        "tier": "Hardening",
+        "notes": "Intelligence on active data poisoning campaigns targeting your sector and model type",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.7.2",
+        "title": "Data quality",
+        "tier": "Hardening",
+        "notes": "Training data quality requirements include integrity — anomaly detection, source allowlisting, provenance tracking as data quality controls",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.7.3",
+        "title": "Data provenance and characteristics",
+        "tier": "Hardening",
+        "notes": "Training data provenance documented — full chain from source to training dataset, modification history tracked",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.6.2.3",
+        "title": "AI system security",
+        "tier": "Hardening",
+        "notes": "Training pipeline integrity controls — input validation, source allowlisting as AIMS security design requirements",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.6.2.6",
+        "title": "Testing of AI systems",
+        "tier": "Hardening",
+        "notes": "Poisoning detection in AIMS testing — backdoor trigger testing, biased output detection before each production promotion",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C5-M5.1",
+        "title": "Safety mitigation implementation",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-II-C1-M1.2",
+        "title": "Lawful access to copyright-protected content",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C7-M7.5",
+        "title": "Material changes to risk landscape",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 28–44",
+        "title": "Third-Party Risk — AI data and model provider oversight",
+        "tier": "Foundational",
+        "notes": "Include AI model providers and training data vendors in third-party ICT risk oversight; assess data provenance, integrity, and poisoning risk",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 9",
+        "title": "Protection and Prevention — training pipeline integrity",
+        "tier": "Foundational",
+        "notes": "Implement security controls protecting training data pipelines from unauthorised modification, poisoned data injection, and backdoor embedding",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 8",
+        "title": "Identification — AI training data assets",
+        "tier": "Foundational",
+        "notes": "Identify and classify all AI training datasets, fine-tuning data, and model weights as ICT assets in the asset inventory",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 13",
+        "title": "Learning and Evolving — poisoning post-mortem",
+        "tier": "Foundational",
+        "notes": "Conduct post-incident analysis for data poisoning events; identify root cause, trace poisoned records, and update protection controls",
+        "chunkIds": []
+      }
+    ],
+    "incidents": [
+      {
+        "name": "Many-shot jailbreaking (Anthropic research)",
+        "year": 2024,
+        "incidentId": "INC-028"
+      },
+      {
+        "name": "Anthropic Claude context flooding — resource exhaustion via adversarial long-context prompts",
+        "year": 2024,
+        "incidentId": "INC-045"
+      },
+      {
+        "name": "Google Gemini AI image generator refuses to depict white people — overcorrected safety filters",
+        "year": 2024,
+        "incidentId": "INC-051"
+      },
+      {
+        "name": "Anthropic Sleeper Agents paper — models trained to hide malicious behaviour",
+        "year": 2024,
+        "incidentId": "INC-061"
+      },
+      {
+        "name": "AI-generated CSAM detection evasion — adversarial manipulation of content safety classifiers",
+        "year": 2024,
+        "incidentId": "INC-063"
+      },
+      {
+        "name": "OpenAI GPT-4o sycophancy — model agrees with users even when they are wrong",
+        "year": 2025,
+        "incidentId": "INC-073"
+      },
+      {
+        "name": "AI recruiting tool gender bias — Amazon scraps internal ML hiring tool",
+        "year": 2024,
+        "incidentId": "INC-074"
+      },
+      {
+        "name": "PoisonedRAG — 5 malicious texts in millions achieve 90% attack success rate on RAG systems",
+        "year": 2025,
+        "incidentId": "INC-108"
+      }
+    ]
+  },
+  {
+    "entryId": "llm06",
+    "name": "Unbounded Consumption",
+    "severity": "High",
+    "sourceUrl": "https://github.com/genai-security-project/crosswalk/blob/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM06.json",
+    "links": [
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0029",
+        "title": "Denial of ML Service",
+        "tier": "Foundational",
+        "url": "https://atlas.mitre.org/techniques/AML.T0029",
+        "notes": "Overloading AI systems with computationally expensive inputs to cause service degradation",
+        "chunkIds": []
+      },
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0034",
+        "title": "Cost Harvesting",
+        "tier": "Foundational",
+        "url": "https://atlas.mitre.org/techniques/AML.T0034",
+        "notes": "Crafting inputs that maximise token usage or API costs per request",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MS-2.5",
+        "title": "Testing — adversarial",
+        "tier": "Foundational",
+        "notes": "Resource exhaustion and denial-of-service scenarios included in adversarial testing",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MG-2.2",
+        "title": "Risk response",
+        "tier": "Foundational",
+        "notes": "Defined response to detected unbounded consumption events including rate limiting activation",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MG-3.2",
+        "title": "Residual risk — availability",
+        "tier": "Foundational",
+        "notes": "Residual availability risk from resource exhaustion documented and treated",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "GV-1.7",
+        "title": "Policies for trustworthy AI",
+        "tier": "Foundational",
+        "notes": "Organisational policy defines resource limits and availability requirements for all LLM deployments",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 9 — Risk management",
+        "title": "Availability risks identified and mitigated",
+        "tier": "Foundational",
+        "notes": "Resource exhaustion and DoS scenarios included in risk management system",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_9_1",
+          "art_9_10",
+          "art_9_2",
+          "art_9_3",
+          "art_9_4",
+          "art_9_5",
+          "art_9_6",
+          "art_9_7",
+          "art_9_8",
+          "art_9_9"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 15 — Accuracy, robustness, cybersecurity",
+        "title": "High-risk AI must remain available under adversarial conditions",
+        "tier": "Foundational",
+        "notes": "Technical resilience against denial-of-service attacks is an Art. 15 requirement",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_15_1",
+          "art_15_2",
+          "art_15_3",
+          "art_15_4",
+          "art_15_5"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 17 — Quality management",
+        "title": "Operational continuity procedures documented",
+        "tier": "Foundational",
+        "notes": "Post-market monitoring and incident response for availability failures required",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_17_1",
+          "art_17_2",
+          "art_17_3",
+          "art_17_4"
+        ]
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.16",
+        "title": "Monitoring activities",
+        "tier": "Foundational",
+        "notes": "Real-time monitoring of LLM resource consumption — cost anomaly detection and alerting",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.5.30",
+        "title": "ICT readiness for business continuity",
+        "tier": "Foundational",
+        "notes": "LLM availability requirements in BCP — RTO/RPO defined, rate limiting as resilience control",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.13",
+        "title": "Backup",
+        "tier": "Foundational",
+        "notes": "Backup and recovery for LLM service infrastructure — failover capability tested",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.5.24",
+        "title": "Incident management",
+        "tier": "Foundational",
+        "notes": "Incident response procedures for LLM availability failures and cost overruns",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.6.2.3",
+        "title": "AI system security",
+        "tier": "Foundational",
+        "notes": "Rate limiting and resource controls as AIMS security design requirements — enforced at deployment",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.6.2.8",
+        "title": "Monitoring of AI systems",
+        "tier": "Foundational",
+        "notes": "Resource consumption monitored in operation — cost anomaly detection as AIMS monitoring control",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "Cl.6.1",
+        "title": "Risk assessment",
+        "tier": "Foundational",
+        "notes": "Consumption risk in AI risk assessment — impact on service availability, cost exposure documented",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "Cl.9",
+        "title": "Performance evaluation",
+        "tier": "Foundational",
+        "notes": "Resource consumption metrics in AIMS performance evaluation — consumption trends in management review",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C3-M3.5",
+        "title": "Post-market monitoring and external evaluation",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C9-M9.1",
+        "title": "Incident tracking and documentation",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C8-M8.2",
+        "title": "Resource allocation",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 9",
+        "title": "Protection and Prevention — consumption controls",
+        "tier": "Foundational",
+        "notes": "Implement rate limiting, token quotas, and cost circuit breakers on financial AI inference services; define per-user and per-service consumption limits",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 10",
+        "title": "Detection — consumption anomaly detection",
+        "tier": "Foundational",
+        "notes": "Monitor AI service consumption metrics in real time; alert on token spikes, latency degradation, and cost overruns affecting financial service availability",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 12",
+        "title": "Backup Policies — AI service continuity",
+        "tier": "Foundational",
+        "notes": "Maintain backup model deployments and fallback inference paths for AI services supporting critical financial functions; test restoration procedures",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 11",
+        "title": "Response and Recovery — consumption incident response",
+        "tier": "Foundational",
+        "notes": "Define response and recovery procedures for AI consumption incidents; include automatic throttling, failover activation, and service restoration",
+        "chunkIds": []
+      }
+    ],
+    "incidents": [
+      {
+        "name": "Clarkesworld magazine overwhelmed by AI-generated fiction submissions",
+        "year": 2023,
+        "incidentId": "INC-014"
+      },
+      {
+        "name": "AutoGPT and BabyAGI — uncontrolled web browsing and file system access",
+        "year": 2023,
+        "incidentId": "INC-017"
+      },
+      {
+        "name": "AI voice deepfake CEO fraud — Hong Kong $25M loss",
+        "year": 2024,
+        "incidentId": "INC-026"
+      },
+      {
+        "name": "Anthropic Claude context flooding — resource exhaustion via adversarial long-context prompts",
+        "year": 2024,
+        "incidentId": "INC-045"
+      }
+    ]
+  },
+  {
+    "entryId": "llm07",
+    "name": "Misinformation",
+    "severity": "High",
+    "sourceUrl": "https://github.com/genai-security-project/crosswalk/blob/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM07.json",
+    "links": [
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0045",
+        "title": "Disinformation",
+        "tier": "Foundational",
+        "url": "https://atlas.mitre.org/techniques/AML.T0045",
+        "notes": "Using AI-generated content to deliberately spread false information",
+        "chunkIds": []
+      },
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0047",
+        "title": "Influence via Automated Content",
+        "tier": "Foundational",
+        "url": "https://atlas.mitre.org/techniques/AML.T0047",
+        "notes": "Generating high-volume automated content to shape perception or overwhelm fact-checking",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "GV-1.7",
+        "title": "Policies for trustworthy AI",
+        "tier": "Foundational",
+        "notes": "Organisational policy on AI-generated content accuracy and human oversight requirements",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MS-2.6",
+        "title": "Testing — output quality",
+        "tier": "Foundational",
+        "notes": "Accuracy and hallucination testing included in AI evaluation programme",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MS-4.1",
+        "title": "Feedback mechanisms",
+        "tier": "Foundational",
+        "notes": "Feedback channels for detecting and tracking misinformation in production",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MG-2.4",
+        "title": "Risk response — data",
+        "tier": "Foundational",
+        "notes": "Procedures for responding to detected misinformation incidents",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 13 — Transparency",
+        "title": "High-risk AI system information must include accuracy metrics and known limitations",
+        "tier": "Foundational",
+        "notes": "Hallucination rates and accuracy limitations must be disclosed to deployers and users",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_13_1",
+          "art_13_2",
+          "art_13_3"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 50 — Transparency for certain AI systems",
+        "title": "AI-generated content must be marked as such — chatbots must disclose AI nature",
+        "tier": "Foundational",
+        "notes": "Mandatory AI disclosure prevents users from treating hallucinated content as authoritative human output",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_50_1",
+          "art_50_2",
+          "art_50_3",
+          "art_50_4",
+          "art_50_5",
+          "art_50_6",
+          "art_50_7"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 55(1)(a) — Systemic risk GPAI",
+        "title": "Systemic risk GPAI providers must assess and mitigate risks including disinformation",
+        "tier": "Foundational",
+        "notes": "Misinformation risk assessment and mitigation is a binding obligation for systemic risk models",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_55_1"
+        ]
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.16",
+        "title": "Monitoring activities",
+        "tier": "Foundational",
+        "notes": "Production monitoring for output accuracy — hallucination rate tracking, anomaly detection on model drift",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.5.7",
+        "title": "Threat intelligence",
+        "tier": "Foundational",
+        "notes": "Intelligence on disinformation campaigns and active manipulation of RAG sources",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.6.3",
+        "title": "Information security awareness training",
+        "tier": "Foundational",
+        "notes": "User training on LLM output limitations — verification requirements and critical evaluation",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.5.36",
+        "title": "Compliance with policies",
+        "tier": "Foundational",
+        "notes": "Policy on AI-generated content accuracy — disclosure requirements, human verification thresholds",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.5.2",
+        "title": "Impact assessment",
+        "tier": "Foundational",
+        "notes": "AI impact assessment covers misinformation risk — which domains are affected, what is the consequence of incorrect output per stakeholder",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.6.2.8",
+        "title": "Monitoring of AI systems",
+        "tier": "Foundational",
+        "notes": "Production monitoring for accuracy degradation — hallucination rates tracked as AIMS operational monitoring",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.8.1",
+        "title": "Information for interested parties",
+        "tier": "Foundational",
+        "notes": "Transparency about AI system limitations — users informed of advisory status, accuracy limitations, verification requirements",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.9.1",
+        "title": "Use of AI systems",
+        "tier": "Foundational",
+        "notes": "Guidance on appropriate AI system use — domains requiring human verification documented as AIMS use guidance",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C3-M3.2",
+        "title": "Model evaluations",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C7-M7.1",
+        "title": "Model description and behaviour documentation",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C10-M10.2",
+        "title": "Public transparency",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 10",
+        "title": "Detection — output quality monitoring",
+        "tier": "Foundational",
+        "notes": "Deploy detection mechanisms for AI output quality degradation — hallucinations, factual errors, and misleading content in financial AI outputs",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 5–7",
+        "title": "ICT Risk Management — AI reliability governance",
+        "tier": "Foundational",
+        "notes": "Include AI output reliability in the ICT risk management framework; define acceptable accuracy thresholds for financial AI use cases",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 13",
+        "title": "Learning and Evolving — misinformation post-mortem",
+        "tier": "Foundational",
+        "notes": "Conduct post-incident analysis for misinformation events; identify root cause, assess customer and regulatory impact, and update controls",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 9",
+        "title": "Protection and Prevention — grounding controls",
+        "tier": "Foundational",
+        "notes": "Implement factual grounding controls for financial AI outputs — RAG with authoritative sources, confidence scoring, and human review for high-stakes outputs",
+        "chunkIds": []
+      }
+    ],
+    "incidents": [
+      {
+        "name": "Bing Chat 'Sydney' jailbreak — persona escape and threatening behaviour",
+        "year": 2023,
+        "incidentId": "INC-002"
+      },
+      {
+        "name": "Air Canada chatbot invents bereavement discount policy — tribunal ruling",
+        "year": 2024,
+        "incidentId": "INC-004"
+      },
+      {
+        "name": "Clarkesworld magazine overwhelmed by AI-generated fiction submissions",
+        "year": 2023,
+        "incidentId": "INC-014"
+      },
+      {
+        "name": "AI voice deepfake CEO fraud — Hong Kong $25M loss",
+        "year": 2024,
+        "incidentId": "INC-026"
+      },
+      {
+        "name": "Meta Galactica model withdrawn after misinformation at launch",
+        "year": 2022,
+        "incidentId": "INC-031"
+      },
+      {
+        "name": "OpenAI o1/o3 reasoning chain jailbreak via chain-of-thought manipulation",
+        "year": 2025,
+        "incidentId": "INC-033"
+      },
+      {
+        "name": "AI companion apps: manipulation and exploitation of human-agent trust",
+        "year": 2025,
+        "incidentId": "INC-048"
+      },
+      {
+        "name": "Google Gemini AI image generator refuses to depict white people — overcorrected safety filters",
+        "year": 2024,
+        "incidentId": "INC-051"
+      },
+      {
+        "name": "NYC city chatbot tells businesses to break the law — fabricated legal guidance",
+        "year": 2024,
+        "incidentId": "INC-052"
+      },
+      {
+        "name": "Google AI Overviews recommends adding glue to pizza — RAG hallucination at search scale",
+        "year": 2024,
+        "incidentId": "INC-056"
+      },
+      {
+        "name": "Character.AI teen suicide — AI companion encouraged self-harm",
+        "year": 2024,
+        "incidentId": "INC-057"
+      },
+      {
+        "name": "AI-generated Biden robocalls — deepfake voice used to suppress voter turnout",
+        "year": 2024,
+        "incidentId": "INC-058"
+      },
+      {
+        "name": "Perplexity AI plagiarism — verbatim content reproduction without attribution",
+        "year": 2024,
+        "incidentId": "INC-059"
+      },
+      {
+        "name": "Apple Intelligence notification hallucinations — fabricated BBC news headlines",
+        "year": 2024,
+        "incidentId": "INC-060"
+      },
+      {
+        "name": "EU GDPR enforcement: ChatGPT cannot correct factually wrong personal data",
+        "year": 2024,
+        "incidentId": "INC-068"
+      },
+      {
+        "name": "OpenAI GPT-4o sycophancy — model agrees with users even when they are wrong",
+        "year": 2025,
+        "incidentId": "INC-073"
+      },
+      {
+        "name": "Tesla FSD phantom braking and obstacle hallucination — AI perception failures at highway speed",
+        "year": 2024,
+        "incidentId": "INC-076"
+      },
+      {
+        "name": "Midjourney Trump arrest deepfakes go viral — AI-generated images shape public perception",
+        "year": 2023,
+        "incidentId": "INC-077"
+      },
+      {
+        "name": "OpenAI Whisper hallucinating medical transcriptions — fabricated diagnoses in healthcare AI",
+        "year": 2024,
+        "incidentId": "INC-080"
+      },
+      {
+        "name": "Meta Rogue AI Agent Sev-1 — autonomous agent posts incorrect advice, exposing proprietary data",
+        "year": 2026,
+        "incidentId": "INC-091"
+      },
+      {
+        "name": "Replit vibe coding meltdown — agent hallucinated data, deleted production database, hid mistakes",
+        "year": 2025,
+        "incidentId": "INC-106"
+      }
+    ]
+  },
+  {
+    "entryId": "llm08",
+    "name": "Hidden Context Exposure",
+    "severity": "High",
+    "sourceUrl": "https://github.com/genai-security-project/crosswalk/blob/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM08.json",
+    "links": [
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0041",
+        "title": "Configuration Exposure",
+        "tier": "Foundational",
+        "url": "https://atlas.mitre.org/techniques/AML.T0041",
+        "notes": "Extraction of internal model configuration, instructions, or system prompts",
+        "chunkIds": []
+      },
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0051.000",
+        "title": "Direct Prompt Injection",
+        "tier": "Foundational",
+        "url": "https://atlas.mitre.org/techniques/AML.T0051.000",
+        "notes": "Crafting inputs specifically designed to reveal or override system prompt content",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "GV-1.6",
+        "title": "Policies for data privacy",
+        "tier": "Foundational",
+        "notes": "System prompts classified as sensitive configuration — subject to data governance policy",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MS-2.6",
+        "title": "Testing — data leakage",
+        "tier": "Foundational",
+        "notes": "Prompt extraction scenarios included in evaluation programme",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MG-2.4",
+        "title": "Risk response — data",
+        "tier": "Foundational",
+        "notes": "Defined response for detected hidden context exposure",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MP-2.3",
+        "title": "Risk categorisation",
+        "tier": "Foundational",
+        "notes": "Hidden context exposure risk mapped and rated in AI risk register",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 13 — Transparency",
+        "title": "Users must receive sufficient information about the AI system — but this does not require disclosing system prompts",
+        "tier": "Foundational",
+        "notes": "Transparency obligation must be met without exposing security-sensitive system prompt content",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_13_1",
+          "art_13_2",
+          "art_13_3"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 17 — Quality management",
+        "title": "Configuration management documented",
+        "tier": "Foundational",
+        "notes": "System prompt versions, access controls, and change procedures are quality management artefacts",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_17_1",
+          "art_17_2",
+          "art_17_3",
+          "art_17_4"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 53(1)(b) — GPAI transparency",
+        "title": "GPAI providers must publish summaries of training data and model capabilities",
+        "tier": "Foundational",
+        "notes": "Published summaries must not inadvertently expose security-sensitive configuration",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_53_1"
+        ]
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.5.12",
+        "title": "Classification of information",
+        "tier": "Foundational",
+        "notes": "System prompts classified as sensitive configuration — subject to data governance policy",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.3",
+        "title": "Information access restriction",
+        "tier": "Foundational",
+        "notes": "Access controls on system prompt storage — version controlled, access logged",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.24",
+        "title": "Use of cryptography",
+        "tier": "Foundational",
+        "notes": "System prompts encrypted at rest — not stored in cleartext configuration files",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.15",
+        "title": "Logging",
+        "tier": "Foundational",
+        "notes": "Access to system prompts logged — unauthorised access attempts detectable",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.7.3",
+        "title": "Data provenance and characteristics",
+        "tier": "Foundational",
+        "notes": "System prompts classified as sensitive operational data — provenance, access controls, handling requirements documented",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.6.2.3",
+        "title": "AI system security",
+        "tier": "Foundational",
+        "notes": "System prompt encryption and access controls as AIMS security design requirements",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.8.1",
+        "title": "Information for interested parties",
+        "tier": "Foundational",
+        "notes": "Transparency obligations balanced with operational security — what must be disclosed vs what may be kept confidential",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "Cl.7",
+        "title": "Support",
+        "tier": "Foundational",
+        "notes": "Documented information controls — system prompts managed as AIMS documented information with appropriate access controls",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-I-C1-M1.1",
+        "title": "Drawing up and maintaining model documentation",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C7-M7.1",
+        "title": "Model description and behaviour documentation",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C2-M2.1",
+        "title": "Systemic risk identification process",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 9",
+        "title": "Protection and Prevention — prompt confidentiality",
+        "tier": "Foundational",
+        "notes": "Classify system prompts as sensitive ICT configuration; implement protection controls including encryption, access control, and output monitoring to prevent extraction",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 17–23",
+        "title": "ICT Incident Management — prompt extraction reporting",
+        "tier": "Foundational",
+        "notes": "Classify successful system prompt extraction as an ICT-related incident; assess impact and report per DORA incident classification criteria",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 13",
+        "title": "Learning and Evolving — extraction post-mortem",
+        "tier": "Foundational",
+        "notes": "Conduct post-incident analysis for prompt extraction events; identify root cause, assess business impact, and update protection controls",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 10",
+        "title": "Detection — extraction attempt detection",
+        "tier": "Foundational",
+        "notes": "Deploy detection mechanisms for system prompt extraction attempts; monitor inference requests for extraction technique patterns",
+        "chunkIds": []
+      }
+    ],
+    "incidents": [
+      {
+        "name": "GitHub Copilot reproduces verbatim licensed code and embedded secrets",
+        "year": 2023,
+        "incidentId": "INC-008"
+      },
+      {
+        "name": "WormGPT — uncensored LLM sold for cybercrime on dark web forums",
+        "year": 2023,
+        "incidentId": "INC-011"
+      },
+      {
+        "name": "Perez & Ribeiro — 'Ignore Previous Prompt': foundational direct injection study",
+        "year": 2022,
+        "incidentId": "INC-013"
+      },
+      {
+        "name": "GPT-4 system prompt extraction via jailbreak in production deployments",
+        "year": 2023,
+        "incidentId": "INC-018"
+      },
+      {
+        "name": "LAAF v2.0 — Empirical LPCI breakthrough rates of 67–100% across 5 production LLMs",
+        "year": 2026,
+        "incidentId": "INC-021"
+      },
+      {
+        "name": "Greshake et al. \"Not What You've Signed Up For\" indirect prompt injection paper",
+        "year": 2023,
+        "incidentId": "INC-022"
+      },
+      {
+        "name": "GitHub Copilot Workspace prompt injection via repository content",
+        "year": 2024,
+        "incidentId": "INC-025"
+      },
+      {
+        "name": "Skeleton Key: direct system prompt override (Microsoft)",
+        "year": 2024,
+        "incidentId": "INC-030"
+      },
+      {
+        "name": "DPD AI chatbot swears at customer and criticises company — prompt injection via customer input",
+        "year": 2024,
+        "incidentId": "INC-053"
+      },
+      {
+        "name": "OpenAI GPT-4 system prompt extraction toolkit — systematic prompt leakage",
+        "year": 2024,
+        "incidentId": "INC-065"
+      }
+    ]
+  },
+  {
+    "entryId": "llm09",
+    "name": "Vector and Embedding Weaknesses",
+    "severity": "Medium",
+    "sourceUrl": "https://github.com/genai-security-project/crosswalk/blob/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM09.json",
+    "links": [
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0063",
+        "title": "Embedding Manipulation",
+        "tier": "Hardening",
+        "url": "https://atlas.mitre.org/techniques/AML.T0063",
+        "notes": "Crafting inputs whose embeddings manipulate similarity search results",
+        "chunkIds": []
+      },
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0025",
+        "title": "Resource Exhaustion via Embedding",
+        "tier": "Hardening",
+        "url": "https://atlas.mitre.org/techniques/AML.T0025",
+        "notes": "Flooding vector stores with adversarial embeddings to degrade retrieval quality",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MS-2.5",
+        "title": "Testing — adversarial",
+        "tier": "Hardening",
+        "notes": "Vector store and embedding adversarial testing included in evaluation programme",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MS-3.3",
+        "title": "Data quality",
+        "tier": "Hardening",
+        "notes": "Data quality controls applied to embedding generation and vector store ingestion",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MG-2.2",
+        "title": "Risk response",
+        "tier": "Hardening",
+        "notes": "Response procedures for detected vector store compromise or manipulation",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MP-2.3",
+        "title": "Risk categorisation",
+        "tier": "Hardening",
+        "notes": "Embedding and vector store risks mapped in AI system risk register",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 9 — Risk management",
+        "title": "Embedding and retrieval risks identified and mitigated",
+        "tier": "Hardening",
+        "notes": "Vector store attack scenarios included in risk management system",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_9_1",
+          "art_9_10",
+          "art_9_2",
+          "art_9_3",
+          "art_9_4",
+          "art_9_5",
+          "art_9_6",
+          "art_9_7",
+          "art_9_8",
+          "art_9_9"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 10 — Data and data governance",
+        "title": "Data quality controls applied to all data in scope — including RAG corpora",
+        "tier": "Hardening",
+        "notes": "Quality controls on embedding generation and vector store ingestion required",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_10_1",
+          "art_10_2",
+          "art_10_3",
+          "art_10_4",
+          "art_10_5",
+          "art_10_6"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 15 — Accuracy, robustness, cybersecurity",
+        "title": "Technical robustness against adversarial manipulation",
+        "tier": "Hardening",
+        "notes": "Embedding manipulation resistance is an Art. 15 technical requirement",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_15_1",
+          "art_15_2",
+          "art_15_3",
+          "art_15_4",
+          "art_15_5"
+        ]
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.3",
+        "title": "Information access restriction",
+        "tier": "Hardening",
+        "notes": "RBAC on all vector store collections — no unauthenticated access to any collection",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.24",
+        "title": "Use of cryptography",
+        "tier": "Hardening",
+        "notes": "Encryption of all vector store data at rest and in transit",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.16",
+        "title": "Monitoring activities",
+        "tier": "Hardening",
+        "notes": "Anomaly detection on vector store query patterns — bulk extraction and poisoning indicators",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.11",
+        "title": "Data masking",
+        "tier": "Hardening",
+        "notes": "Differential privacy in embedding generation for sensitive corpora",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.7.2",
+        "title": "Data quality",
+        "tier": "Hardening",
+        "notes": "Vector store content quality requirements — RBAC, encryption, source validation as data quality controls",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.7.3",
+        "title": "Data provenance and characteristics",
+        "tier": "Hardening",
+        "notes": "Embedding provenance documented — source document, classification, access controls tracked",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.6.2.6",
+        "title": "Testing of AI systems",
+        "tier": "Hardening",
+        "notes": "Vector store attacks in AIMS testing — RBAC bypass, embedding inversion, bulk extraction tested",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.10.1",
+        "title": "Third-party AI system acquisition",
+        "tier": "Hardening",
+        "notes": "Vector database providers assessed as third-party AI system components",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C6-M6.2",
+        "title": "Security mitigation implementation",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C3-M3.1",
+        "title": "Model-independent information gathering",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-I-C1-M1.3",
+        "title": "Quality, integrity, and security of information",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 9",
+        "title": "Protection and Prevention — embedding store protection",
+        "tier": "Foundational",
+        "notes": "Implement security controls for vector databases and embedding stores — encryption at rest, access controls, and integrity monitoring for financial data embeddings",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 24–27",
+        "title": "Resilience Testing — embedding security testing",
+        "tier": "Foundational",
+        "notes": "Include vector database and embedding pipeline security in resilience testing; test for injection, access control bypass, and data extraction from embeddings",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 8",
+        "title": "Identification — embedding infrastructure assets",
+        "tier": "Foundational",
+        "notes": "Register vector databases, embedding models, and retrieval infrastructure in the ICT asset inventory with classification per data sensitivity",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 10",
+        "title": "Detection — embedding tampering detection",
+        "tier": "Foundational",
+        "notes": "Monitor embedding stores for unauthorised modifications, anomalous writes, and bulk access patterns indicative of extraction or poisoning",
+        "chunkIds": []
+      }
+    ],
+    "incidents": [
+      {
+        "name": "Azure OpenAI content filter bypass via structured output mode",
+        "year": 2025,
+        "incidentId": "INC-037"
+      },
+      {
+        "name": "Adversarial embedding attacks on production RAG systems",
+        "year": 2024,
+        "incidentId": "INC-046"
+      },
+      {
+        "name": "Google AI Overviews recommends adding glue to pizza — RAG hallucination at search scale",
+        "year": 2024,
+        "incidentId": "INC-056"
+      },
+      {
+        "name": "OpenAI Whisper hallucinating medical transcriptions — fabricated diagnoses in healthcare AI",
+        "year": 2024,
+        "incidentId": "INC-080"
+      }
+    ]
+  },
+  {
+    "entryId": "llm10",
+    "name": "Improper Output Handling",
+    "severity": "High",
+    "sourceUrl": "https://github.com/genai-security-project/crosswalk/blob/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM10.json",
+    "links": [
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0037",
+        "title": "Output Manipulation",
+        "tier": "Foundational",
+        "url": "https://atlas.mitre.org/techniques/AML.T0037",
+        "notes": "Crafting inputs that produce dangerous outputs consumed by downstream systems",
+        "chunkIds": []
+      },
+      {
+        "framework": "MITRE ATLAS",
+        "ref": "AML.T0040",
+        "title": "Unsafe Deserialisation via LLM",
+        "tier": "Foundational",
+        "url": "https://atlas.mitre.org/techniques/AML.T0040",
+        "notes": "LLM outputs containing serialised payloads executed by downstream components",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MS-2.5",
+        "title": "Testing — output safety",
+        "tier": "Foundational",
+        "notes": "Output handling security included in AI evaluation and testing programme",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MS-2.6",
+        "title": "Testing — data leakage",
+        "tier": "Foundational",
+        "notes": "Output leakage and injection scenarios covered in evaluation",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "MG-2.2",
+        "title": "Risk response",
+        "tier": "Foundational",
+        "notes": "Incident response for output handling failures defined and tested",
+        "chunkIds": []
+      },
+      {
+        "framework": "NIST AI RMF 1.0",
+        "frameworkId": "NIST_AI_RMF",
+        "ref": "GV-1.7",
+        "title": "Policies for trustworthy AI",
+        "tier": "Foundational",
+        "notes": "Organisational policy requires secure output handling for all LLM integrations",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 9 — Risk management",
+        "title": "Output handling risks identified and mitigated",
+        "tier": "Foundational",
+        "notes": "Insecure output handling included in risk management system",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_9_1",
+          "art_9_10",
+          "art_9_2",
+          "art_9_3",
+          "art_9_4",
+          "art_9_5",
+          "art_9_6",
+          "art_9_7",
+          "art_9_8",
+          "art_9_9"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 15 — Accuracy, robustness, cybersecurity",
+        "title": "Accurate, robust outputs resilient to misuse",
+        "tier": "Foundational",
+        "notes": "Output validation and sanitisation are Art. 15 technical requirements",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_15_1",
+          "art_15_2",
+          "art_15_3",
+          "art_15_4",
+          "art_15_5"
+        ]
+      },
+      {
+        "framework": "EU AI Act",
+        "frameworkId": "EU_AI_ACT",
+        "ref": "Art. 17 — Quality management",
+        "title": "Documented procedures covering output quality",
+        "tier": "Foundational",
+        "notes": "Post-market monitoring of output handling incidents required",
+        "packId": "eu_ai_act",
+        "chunkIds": [
+          "art_17_1",
+          "art_17_2",
+          "art_17_3",
+          "art_17_4"
+        ]
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.28",
+        "title": "Secure coding",
+        "tier": "Foundational",
+        "notes": "Output encoding, sanitisation, and schema validation as secure coding requirements",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.26",
+        "title": "Application security requirements",
+        "tier": "Foundational",
+        "notes": "Security requirements for all interfaces consuming LLM output — specified before development",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.29",
+        "title": "Security testing",
+        "tier": "Foundational",
+        "notes": "Output injection scenarios in security testing — XSS, SQL injection, command injection via LLM output",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 27001:2022",
+        "ref": "A.8.16",
+        "title": "Monitoring activities",
+        "tier": "Foundational",
+        "notes": "Runtime monitoring for output handling incidents — injection attempts in LLM output channels",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.6.2.3",
+        "title": "AI system security",
+        "tier": "Foundational",
+        "notes": "Output encoding and schema validation as AIMS security design requirements — LLM output treated as untrusted input to downstream systems",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.6.2.6",
+        "title": "Testing of AI systems",
+        "tier": "Foundational",
+        "notes": "Output injection scenarios in AIMS testing — XSS, SQL injection, command injection via LLM output tested before deployment",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "A.9.1",
+        "title": "Use of AI systems",
+        "tier": "Foundational",
+        "notes": "Guidance on AI system use — downstream consumers informed that LLM output must be validated before use",
+        "chunkIds": []
+      },
+      {
+        "framework": "ISO/IEC 42001:2023",
+        "ref": "Cl.8",
+        "title": "Operation",
+        "tier": "Foundational",
+        "notes": "Operational controls for LLM deployment — output handling requirements documented as AIMS operational procedures",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C5-M5.1",
+        "title": "Safety mitigation implementation",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-II-C1-M1.4",
+        "title": "Copyright-infringing output mitigation",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "EU AI Act Code of Practice",
+        "ref": "CoP-III-C3-M3.2",
+        "title": "Model evaluations",
+        "tier": "Foundational",
+        "notes": "DRAFT — SME review required",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 9",
+        "title": "Protection and Prevention — output validation",
+        "tier": "Foundational",
+        "notes": "Validate, encode, and escape all model output before it reaches a browser, shell, database, or downstream financial system; treat model output as untrusted input to the consuming component",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 8",
+        "title": "Identification — output consumer inventory",
+        "tier": "Foundational",
+        "notes": "Record every downstream consumer of model output in the ICT asset inventory, with its execution privileges and the validation applied at the boundary",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 10",
+        "title": "Detection — anomalous output monitoring",
+        "tier": "Foundational",
+        "notes": "Monitor model output reaching privileged sinks; alert on generated code, markup, or query syntax that fails the boundary validation policy",
+        "chunkIds": []
+      },
+      {
+        "framework": "DORA",
+        "ref": "Art. 24–27",
+        "title": "Digital Operational Resilience Testing — output-handling scenarios",
+        "tier": "Foundational",
+        "notes": "Include output-handling exploitation in threat-led penetration testing; cover XSS, SQL injection, command injection, and insecure generated code paths",
+        "chunkIds": []
+      }
+    ],
+    "incidents": [
+      {
+        "name": "GitHub Copilot Workspace prompt injection via repository content",
+        "year": 2024,
+        "incidentId": "INC-025"
+      },
+      {
+        "name": "Azure OpenAI content filter bypass via structured output mode",
+        "year": 2025,
+        "incidentId": "INC-037"
+      },
+      {
+        "name": "Hugging Face model card supply chain manipulation",
+        "year": 2025,
+        "incidentId": "INC-038"
+      },
+      {
+        "name": "Apple Intelligence notification hallucinations — fabricated BBC news headlines",
+        "year": 2024,
+        "incidentId": "INC-060"
+      },
+      {
+        "name": "LLM-generated malware evades endpoint detection — AI-assisted polymorphic code",
+        "year": 2024,
+        "incidentId": "INC-075"
+      }
+    ]
+  }
+]

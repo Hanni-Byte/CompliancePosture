@@ -20,7 +20,7 @@ describe("InMemoryVault", () => {
     const vault = new InMemoryVault();
     expect(vault.custody).toBe("memory");
     expect(vault.retrieve()).toBeNull();
-    vault.store("sk-1");
+    expect(vault.store("sk-1").ok).toBe(true);
     expect(vault.retrieve()).toBe("sk-1");
     vault.wipe();
     expect(vault.retrieve()).toBeNull();
@@ -30,12 +30,23 @@ describe("InMemoryVault", () => {
 describe("SessionVault", () => {
   it("stores in the injected session storage and wipes completely", () => {
     const storage = fakeStorage();
-    const vault = new SessionVault(storage);
+    const vault = new SessionVault(() => storage);
     expect(vault.custody).toBe("session");
-    vault.store("sk-2");
+    expect(vault.store("sk-2").ok).toBe(true);
     expect(vault.retrieve()).toBe("sk-2");
     vault.wipe();
     expect(vault.retrieve()).toBeNull();
     expect(storage.length).toBe(0);
+  });
+
+  it("returns a storage error instead of throwing when storage is unavailable", () => {
+    const vault = new SessionVault(() => {
+      throw new DOMException("blocked", "SecurityError");
+    });
+    const result = vault.store("sk-3");
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.error.message).toMatch(/SecurityError/);
+    expect(vault.retrieve()).toBeNull();
+    expect(() => vault.wipe()).not.toThrow();
   });
 });

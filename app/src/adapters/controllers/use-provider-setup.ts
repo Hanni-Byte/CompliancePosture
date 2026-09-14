@@ -47,13 +47,22 @@ export function useProviderSetup(deps: ProviderSetupDeps) {
       setStatus({ phase: "verifying" });
       const vault = deps.makeVault(custody);
       vaultRef.current = vault;
-      const gateway = deps.makeGateway(provider, vault);
-      const result = await verifyProviderKey({ gateway, vault }, { apiKey });
-      setStatus(
-        result.ok
-          ? { phase: "verified", verification: result.value }
-          : { phase: "failed", error: result.error },
-      );
+      try {
+        const gateway = deps.makeGateway(provider, vault);
+        const result = await verifyProviderKey({ gateway, vault }, { apiKey });
+        // The user may have wiped or switched while we waited: never report
+        // "verified" for a vault that is no longer the active one.
+        if (vaultRef.current !== vault) return;
+        setStatus(
+          result.ok
+            ? { phase: "verified", verification: result.value }
+            : { phase: "failed", error: result.error },
+        );
+      } catch (cause) {
+        // Ports never throw by contract; this guard keeps the UI recoverable.
+        if (vaultRef.current !== vault) return;
+        setStatus({ phase: "failed", error: { kind: "provider_error", message: cause instanceof Error ? cause.message : String(cause) } });
+      }
     },
     [provider, custody, deps],
   );

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "eu_ai_act",
+  "framework": "EU_AI_ACT",
+  "name": "EU Artificial Intelligence Act — Regulation (EU) 2024/1689",
+  "version": "OJ L, 2024/1689, 12.7.2024",
+  "sources": [
+    {
+      "url": "https://publications.europa.eu/resource/cellar/dc8116a1-3fe6-11ef-865a-01aa75ed71a1.0006.03/DOC_1",
+      "revision": "OJ L, 2024/1689, 12.7.2024",
+      "sha256": "8f0b656302f9864cc87e040c371f209a9d65ae1a6cecc25ca5eb737e872d721a"
+    }
+  ],
+  "license": "© European Union, 1998-2024. Reuse authorised under Commission Decision 2011/833/EU; source: EUR-Lex (eur-lex.europa.eu).",
+  "chunkCount": 606,
+  "topicCount": 12,
+  "files": {
+    "chunks.json": "c9c83d79bfcc1f695dd4bcb83be465db512bb5307435b0dfd18d192d7cdbaa91",
+    "topics.json": "b7c269d1a01eae170fd14693be02ae9f26e7b16c915e1b5e9e60ff406559e48e"
+  }
+}

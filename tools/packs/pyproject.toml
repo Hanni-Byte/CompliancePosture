@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "complianceposture-packs"
+version = "0.2.0"
+description = "Offline knowledge-pack pipeline: ingest -> normalize -> chunk -> link -> emit"
+requires-python = ">=3.12"
+license = "AGPL-3.0-only"
+# Exact versions live in requirements.txt (installed first in Dockerfile.packs).
+dependencies = ["pydantic>=2.7", "beautifulsoup4>=4.12"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[tool.setuptools.packages.find]
+include = ["packs*"]
+
+[tool.setuptools.package-data]
+packs = ["topics/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S"]
+ignore = ["S101"]  # asserts are fine in tests

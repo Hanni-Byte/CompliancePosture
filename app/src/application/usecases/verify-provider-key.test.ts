@@ -12,9 +12,7 @@ describe("verifyProviderKey", () => {
 
     const result = await verifyProviderKey({ gateway, vault }, { apiKey: "  sk-test  " });
 
-    expect(result).toEqual(
-      ok({ providerId: "mistral", model: "mistral-small", custody: "memory" }),
-    );
+    expect(result).toEqual(ok({ providerId: "mistral", model: "mistral-small", custody: "memory" }));
     expect(vault.retrieve()).toBe("sk-test");
   });
 
@@ -50,5 +48,17 @@ describe("verifyProviderKey", () => {
 
     expect(result.ok).toBe(true);
     expect(vault.retrieve()).toBe("");
+  });
+
+  it("reports a storage failure before contacting the provider", async () => {
+    const gateway = new FakeLlmGateway();
+    const vault = new FakeVault("session");
+    vault.refuse = "Session storage is unavailable";
+
+    const result = await verifyProviderKey({ gateway, vault }, { apiKey: "k" });
+
+    expect(result).toEqual(err({ kind: "storage", message: "Session storage is unavailable" }));
+    expect(gateway.pingResults).toHaveLength(0);
+    expect(gateway.estimateCostSoFar().calls).toBe(0);
   });
 });

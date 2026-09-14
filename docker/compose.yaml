@@ -4,22 +4,24 @@ services:
   dev:
     profiles: ["dev"]
     container_name: cp-vite
-    image: node:26-alpine@sha256:aadf416b2cdce311a8811ba3f0608a61b77dbf997500e2eafe781b51f6a0b019
+    image: node:26-alpine@sha256:2d984a15c9b54fd0aeb608b8e0d0d83529eb34d2966db27a1fb4f1edc3d298a3
     working_dir: /app
     command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
     ports:
       - "5173:5173"
     volumes:
       - ../app:/app
+      - ../packs:/packs:ro
       - dev_node_modules:/app/node_modules
 
   # Optional local model so contributors can develop fully offline (D2).
   ollama:
     profiles: ["dev", "ollama"]
     container_name: cp-ollama
-    image: ollama/ollama:latest
+    image: ollama/ollama:0.12.3@sha256:c622a7adec67cf5bd7fe1802b7e26aa583a955a54e91d132889301f50c3e0bd0
     environment:
-      OLLAMA_ORIGINS: "http://localhost:5173,http://localhost:8080"
+      # Dev origins; the production hint users get is in app/src/adapters/llm/providers.ts.
+      OLLAMA_ORIGINS: "http://localhost:5173,http://localhost:8080,http://localhost:8081"
     ports:
       - "11434:11434"
     volumes:
@@ -33,10 +35,14 @@ services:
       dockerfile: docker/Dockerfile.packs
     volumes:
       - ../packs:/out
+      - ../tools/packs/raw:/raw
 
+  # Playwright against the real prod image. Locally `make e2e` builds it;
+  # CI loads the image built once by the `image` job and runs with --no-build.
   e2e-app:
     profiles: ["e2e"]
     container_name: cp-e2e-app
+    image: complianceposture:ci
     build:
       context: ..
       dockerfile: docker/Dockerfile
@@ -46,7 +52,7 @@ services:
   e2e:
     profiles: ["e2e"]
     container_name: cp-e2e
-    image: mcr.microsoft.com/playwright:v1.62.1-noble
+    image: mcr.microsoft.com/playwright:v1.62.1-noble@sha256:dcc5531e97840b9b5e794f2814476b21571c5124a3fca2267d73041f56e7580e
     depends_on:
       - e2e-app
     working_dir: /work

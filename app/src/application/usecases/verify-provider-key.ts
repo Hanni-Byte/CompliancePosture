@@ -12,18 +12,20 @@ export interface KeyVerification {
 /**
  * Stores the key in the chosen vault, then proves it works with the cheapest
  * possible authenticated call. On failure the key is wiped — a key we could
- * not verify is never kept around.
+ * not verify is never kept around. A vault that cannot hold the key is a
+ * `storage` failure, reported before any network call is made.
  */
 export async function verifyProviderKey(
   deps: { gateway: LlmGateway; vault: VaultPort },
   input: { apiKey: string; signal?: AbortSignal },
 ): Promise<Result<KeyVerification, LlmError>> {
   const trimmed = input.apiKey.trim();
-  deps.vault.store(trimmed);
+  const stored = deps.vault.store(trimmed);
+  if (!stored.ok) {
+    return err({ kind: "storage", message: stored.error.message });
+  }
 
-  const pinged: Result<ProviderPing, LlmError> = await deps.gateway.ping(
-    input.signal,
-  );
+  const pinged: Result<ProviderPing, LlmError> = await deps.gateway.ping(input.signal);
   if (!pinged.ok) {
     deps.vault.wipe();
     return err(pinged.error);

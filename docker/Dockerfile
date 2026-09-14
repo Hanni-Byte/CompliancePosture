@@ -1,5 +1,7 @@
 # CompliancePosture app image — static site + Caddy, zero API surface.
-# Digest-pinned bases (D18: reproducible trust).
+# Digest-pinned bases (D18). Trust artifact = the published image digest; the
+# image is NOT byte-reproducible by design: security bumps (@latest Go modules,
+# apk upgrade) are applied at build time so fixes land the day they exist.
 #
 # Build knobs (override with --build-arg), nothing hardcoded below:
 #   CADDY_VERSION   caddy ref to build: release tag, "latest", or commit SHA
@@ -37,12 +39,27 @@ RUN printf '%s\n' \
  && go mod tidy \
  && CGO_ENABLED=0 go build -trimpath -o /caddy
 
+# Precompress packs so Caddy serves them without per-request compression.
+FROM alpine:3.23@sha256:fd791d74b68913cbb027c6546007b3f0d3bc45125f797758156952bc2d6daf40 AS packs
+RUN apk add --no-cache zstd gzip
+COPY packs/ /srv/packs/
+RUN find /srv/packs -type f -name '*.json' -exec sh -c 'zstd -q -19 --no-progress "$1" -o "$1.zst" && gzip -9 -k "$1"' _ {} \;
+
 FROM caddy:2-alpine@sha256:5f5c8640aae01df9654968d946d8f1a56c497f1dd5c5cda4cf95ab7c14d58648
 # The pinned base lags Alpine security releases (c-ares/curl CVEs); pull the
 # patched packages while keeping the base digest-pinned.
-RUN apk --no-cache upgrade
+RUN apk --no-cache upgrade \
+ && apk add --no-cache libcap \
+ && addgroup -S caddy && adduser -S -G caddy -H caddy \
+ && mkdir -p /data /config && chown -R caddy:caddy /data /config
 COPY --from=caddy-build /caddy /usr/bin/caddy
+# Bind :80 without root.
+RUN setcap cap_net_bind_service=+ep /usr/bin/caddy
 COPY docker/Caddyfile /etc/caddy/Caddyfile
 COPY --from=build /app/csp.caddy /etc/caddy/csp.caddy
 COPY --from=build /app/dist /srv
-COPY packs/ /srv/packs/
+COPY --from=packs /srv/packs /srv/packs
+USER caddy
+EXPOSE 80
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget -qO- http://127.0.0.1:80/ >/dev/null 2>&1 || exit 1
