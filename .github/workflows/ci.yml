@@ -8,6 +8,8 @@ on:
 permissions:
   contents: read
 
+# Third-party actions are SHA-pinned (tags are mutable); the trailing comment
+# is the version Dependabot keeps current.
 jobs:
   gates:
     runs-on: ubuntu-latest
@@ -15,8 +17,8 @@ jobs:
       run:
         working-directory: app
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 26
           cache: npm
@@ -26,70 +28,110 @@ jobs:
       - run: npm run lint
       - run: npm run depcruise
       - run: npm run test
-      # Gateway contract suite runs as part of `npm run test` once adapters
-      # exist (Feature 1); smoke becomes a real golden diff with Feature 5.
+      # Schema + checksums + invariants + catalogue + crosswalk ids, offline.
+      - run: npm run packs:check:offline
+      # smoke becomes a real golden diff with Feature 5.
       - run: npm run smoke
 
   citation-resolvability:
-    # Real checks arrive with Feature 2 (packs). Until then, validate that any
-    # committed pack at least parses; zero packs is a pass, not a skip.
+    # Constitution gate: every citation URL resolves live (EUR-Lex via Cellar
+    # anchor verification, D25). One automatic retry absorbs upstream blips.
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 26
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+      - run: npm run packs:check || (sleep 30 && npm run packs:check)
+
+  packs:
+    # The pipeline side of the contract (D11): ruff + pytest, pydantic
+    # validation of the committed packs, and a fresh build that must be
+    # byte-identical to what is committed. Raw sources are digest-verified
+    # and cached between runs so upstream availability is not a per-PR risk.
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - name: Verify pack manifests parse
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: .cache/raw
+          key: pack-raw-${{ hashFiles('tools/packs/packs/sources/*.py') }}
+      - name: Build pipeline image
+        run: docker build -f docker/Dockerfile.packs -t complianceposture-packs:ci .
+      - name: Lint + unit tests
+        run: docker run --rm --entrypoint sh complianceposture-packs:ci -c "ruff check packs tests && pytest -q"
+      - name: Validate committed packs (pydantic + checksums + catalogue)
+        run: docker run --rm -v "$PWD/packs:/out:ro" complianceposture-packs:ci validate /out
+      - name: Reproducibility — fresh build equals committed packs (both ways)
         run: |
-          shopt -s nullglob
-          status=0
-          for m in packs/*/manifest.json; do
-            echo "validating $m"
-            python3 -m json.tool "$m" > /dev/null || status=1
-          done
-          exit $status
+          mkdir -p .cache/raw
+          docker run --rm -v "$PWD/packs:/out:ro" -v "$PWD/.cache/raw:/raw" complianceposture-packs:ci check /out --raw /raw
+
+  image:
+    # Built exactly once per run; downstream jobs load this artifact.
+    runs-on: ubuntu-latest
+    needs: gates
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Build prod image
+        run: docker build -f docker/Dockerfile -t complianceposture:ci .
+      - name: Publish image digest (trust artifact, D18)
+        run: |
+          docker image inspect complianceposture:ci --format 'image id: {{.Id}}'
+      - run: docker save complianceposture:ci | gzip > image.tar.gz
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: prod-image
+          path: image.tar.gz
+          retention-days: 1
 
   docker:
     runs-on: ubuntu-latest
-    needs: gates
+    needs: image
     steps:
-      - uses: actions/checkout@v7
-      - name: Build prod image
-        run: docker build -f docker/Dockerfile -t complianceposture:ci .
-      - name: Image serves index.html
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: prod-image
+      - run: docker load < image.tar.gz
+      - name: Image serves index.html, packs, and headers; healthcheck passes
         run: |
           docker run -d --rm -p 8080:80 -e SITE_ADDRESS=":80" --name cp complianceposture:ci
-          sleep 2
+          for i in $(seq 1 15); do curl -fsSo /dev/null http://localhost:8080/ && break; sleep 1; done
           curl -fsS http://localhost:8080/ | grep -qi complianceposture
           curl -fsSI http://localhost:8080/ | grep -qi "content-security-policy"
+          curl -fsSI http://localhost:8080/packs/index.json | grep -qi "application/json"
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8080/packs/nope/manifest.json)" = "404"
+          for i in $(seq 1 20); do [ "$(docker inspect --format '{{.State.Health.Status}}' cp)" = "healthy" ] && break; sleep 2; done
+          test "$(docker inspect --format '{{.State.Health.Status}}' cp)" = "healthy"
+          test "$(docker exec cp id -u)" != "0"
           docker stop cp
-      - name: Publish build digest (trust artifact, D18)
-        run: |
-          docker image inspect complianceposture:ci --format 'image id: {{.Id}}'
 
   e2e:
     runs-on: ubuntu-latest
-    needs: gates
+    needs: image
     steps:
-      - uses: actions/checkout@v7
-      - name: Build prod image
-        run: docker build -f docker/Dockerfile -t complianceposture:e2e .
-      - name: Start prod container
-        run: |
-          docker run -d --rm -p 8081:80 -e SITE_ADDRESS=":80" --name cp complianceposture:e2e
-          for i in $(seq 1 15); do curl -fsSo /dev/null http://localhost:8081/ && break; sleep 1; done
-      - name: Playwright CSP canary suite
-        run: |
-          docker run --rm --network host \
-            -v "$PWD/app:/work" -v /work/node_modules -w /work \
-            mcr.microsoft.com/playwright:v1.62.1-noble \
-            sh -c "npm ci --no-audit --no-fund && npx playwright test"
-      - name: Stop container
-        if: always()
-        run: docker stop cp || true
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: prod-image
+      - run: docker load < image.tar.gz
+      - name: Playwright suite against the built image (same definition as `make e2e`)
+        run: docker compose --profile e2e up --no-build --abort-on-container-exit --exit-code-from e2e
+      - if: always()
+        run: docker compose --profile e2e down
 
   dco:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
       - name: Check DCO sign-off on all commits

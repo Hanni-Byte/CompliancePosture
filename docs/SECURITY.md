@@ -5,10 +5,10 @@
 CompliancePosture is a browser-only static SPA. There is no backend, no database, and no server-side processing of assessment data. The threat model therefore centers on:
 
 - **Key custody:** BYOK API keys live in memory by default, sessionStorage opt-in, never localStorage, never transmitted to Hannibyte. Wipe on demand.
-- **Data at rest:** optional local persistence is AES-GCM encrypted (WebCrypto, PBKDF2 ≥ 600k iterations, SHA-256); IndexedDB stores ciphertext + salt + IV only.
+- **Data at rest (planned, Feature 6):** optional local persistence will be AES-GCM encrypted (WebCrypto, PBKDF2 ≥ 600k iterations, SHA-256); IndexedDB will store ciphertext + salt + IV only. Today nothing is persisted except the opt-in sessionStorage key.
 - **Data in transit:** assessment content flows only browser → the LLM provider the user configured. CSP `connect-src` is generated at build time from the provider registry; the custom-URL mode is the single exception, behind explicit user confirmation.
-- **Supply chain:** no third-party scripts, no CDN JS, no external fonts inside the app. Digest-pinned Docker base images; published build hashes (reproducible-build trust artifact).
-- **Server:** the prod container serves static files via Caddy with access logs disabled/anonymized. It exposes no API surface.
+- **Supply chain:** no third-party scripts, no CDN JS, no external fonts inside the app. Digest-pinned Docker base images, SHA-pinned GitHub Actions, checksum-pinned CI tooling, exact-pinned Python deps; the published image digest is the trust artifact (D18). Knowledge-pack sources are pinned by revision + sha256 and verified on fetch; packs are sha256-verified again in the browser and fail closed.
+- **Server:** the prod container serves static files via a source-built Caddy, unprivileged, with access logs disabled. It exposes no API surface. `/packs/*` is served without SPA fallback so missing files are real 404s.
 
 ## Automated scanning
 

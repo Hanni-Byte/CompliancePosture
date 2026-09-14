@@ -1,8 +1,10 @@
-# Pack pipeline image (tools/packs). The pipeline arrives with Feature 2;
-# this image is wired into compose from day one so the `packs` profile works
-# as soon as the code lands.
-FROM python:3.14-slim
+# Pack pipeline image (tools/packs). Digest-pinned base (D18); exact Python
+# pins from requirements.txt; dev extras included so CI can run pytest/ruff.
+FROM python:3.14-slim@sha256:cad9a2c871761c413caa6fdd6441c783451e740a48aaeba60ae62a8b53525ef6
 WORKDIR /pipeline
+COPY tools/packs/requirements.txt tools/packs/pyproject.toml ./
+RUN pip install --no-cache-dir -r requirements.txt
 COPY tools/packs/ .
-RUN pip install --no-cache-dir -e . || echo "pipeline not implemented yet (Feature 2)"
-CMD ["python", "-m", "packs", "--out", "/out"]
+RUN pip install --no-cache-dir -e ".[dev]"
+ENTRYPOINT ["python", "-m", "packs"]
+CMD ["build", "--out", "/out", "--raw", "/raw"]

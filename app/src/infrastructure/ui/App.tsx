@@ -1,7 +1,14 @@
 import type { ProviderSetupDeps } from "../../adapters/controllers/use-provider-setup";
+import type { RetrievalPort } from "../../application/ports/retrieval";
+import { SearchPanel } from "./SearchPanel";
 import { SetupPanel } from "./SetupPanel";
 
-export function App({ setupDeps }: { setupDeps: ProviderSetupDeps }) {
+export interface AppDeps {
+  setupDeps: ProviderSetupDeps;
+  retrieval: RetrievalPort;
+}
+
+export function App({ setupDeps, retrieval }: AppDeps) {
   return (
     <main className="mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center gap-6 p-8 text-center">
       <header className="space-y-2">
@@ -11,6 +18,7 @@ export function App({ setupDeps }: { setupDeps: ProviderSetupDeps }) {
           data never leaves it.
         </p>
       </header>
+      <SearchPanel retrieval={retrieval} />
       <SetupPanel deps={setupDeps} />
       <p className="text-sm opacity-60">
         Interview and assessment arrive per the roadmap in docs/HANDOFF.md.

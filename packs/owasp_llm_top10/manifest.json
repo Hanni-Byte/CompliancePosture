@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "id": "owasp_llm_top10",
+  "framework": "OWASP_LLM_TOP_10",
+  "name": "OWASP Top 10 for LLM Applications 2026",
+  "version": "2026 edition (published 2026-08-04; source git 9253e38ade58)",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/GenAI-LLM-Top10/9253e38ade58e959b531c0c5c9a4842272c9cd0e/2026/final/LLM01_PromptInjection.md",
+      "revision": "git 9253e38ade58e959b531c0c5c9a4842272c9cd0e",
+      "sha256": "ff036047755c505e6d7837a0114f6056f8f751a3628061b6711b6eac19e1f8b0"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/GenAI-LLM-Top10/9253e38ade58e959b531c0c5c9a4842272c9cd0e/2026/final/LLM02_SensitiveInformationDisclosure.md",
+      "revision": "git 9253e38ade58e959b531c0c5c9a4842272c9cd0e",
+      "sha256": "009153f4880fdabd79585cf1b74e60e2dfe79668c5581853890aa2bec36ab05e"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/GenAI-LLM-Top10/9253e38ade58e959b531c0c5c9a4842272c9cd0e/2026/final/LLM03_ExcessiveAgency.md",
+      "revision": "git 9253e38ade58e959b531c0c5c9a4842272c9cd0e",
+      "sha256": "e961d0d9fe8382be4086aaddd65c1fad0d5d53220174493fe8c287f864c0529e"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/GenAI-LLM-Top10/9253e38ade58e959b531c0c5c9a4842272c9cd0e/2026/final/LLM04_SupplyChain.md",
+      "revision": "git 9253e38ade58e959b531c0c5c9a4842272c9cd0e",
+      "sha256": "b5cb83fe937ecf38b8017918ac90b378da6d9c8ec9e2b485f422c08e4d66ac9e"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/GenAI-LLM-Top10/9253e38ade58e959b531c0c5c9a4842272c9cd0e/2026/final/LLM05_DataModelPoisoning.md",
+      "revision": "git 9253e38ade58e959b531c0c5c9a4842272c9cd0e",
+      "sha256": "28ba5d86c102c82916066aae4bde2c10605cdb98cca51f572093ba002d2a198d"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/GenAI-LLM-Top10/9253e38ade58e959b531c0c5c9a4842272c9cd0e/2026/final/LLM06_UnboundedConsumption.md",
+      "revision": "git 9253e38ade58e959b531c0c5c9a4842272c9cd0e",
+      "sha256": "e121147737d4750f89466fe191b5581fe71a822d8e1cfb621ea91d0d6a1dc6d5"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/GenAI-LLM-Top10/9253e38ade58e959b531c0c5c9a4842272c9cd0e/2026/final/LLM07_Misinformation.md",
+      "revision": "git 9253e38ade58e959b531c0c5c9a4842272c9cd0e",
+      "sha256": "5686479c061cd2057b9905775ce70fc92b1b26e9daf296928521d56837ad4732"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/GenAI-LLM-Top10/9253e38ade58e959b531c0c5c9a4842272c9cd0e/2026/final/LLM08_HiddenContextExposure.md",
+      "revision": "git 9253e38ade58e959b531c0c5c9a4842272c9cd0e",
+      "sha256": "e00d214f81757f626510df57e92116bec026b6c31ef7c3fb2bb52b71318c5ffe"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/GenAI-LLM-Top10/9253e38ade58e959b531c0c5c9a4842272c9cd0e/2026/final/LLM09_VectorAndEmbeddingWeaknesses.md",
+      "revision": "git 9253e38ade58e959b531c0c5c9a4842272c9cd0e",
+      "sha256": "e1a3aff504a708d46c5dbf1c4bbc9ae05f3206cc6ea8e6e9d544b3f0d0ff7c23"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/GenAI-LLM-Top10/9253e38ade58e959b531c0c5c9a4842272c9cd0e/2026/final/LLM10_ImproperOutputHandling.md",
+      "revision": "git 9253e38ade58e959b531c0c5c9a4842272c9cd0e",
+      "sha256": "d61a5ca0eddb38cdd0f485d642ed263c259638e2f1cf82eb1563c064491d67f0"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/crosswalk/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM01.json",
+      "revision": "git 490a7e484dafccde3c171ac2324c7fd32fba0b2b",
+      "sha256": "1b278e628c7a64a941a1b515c680cd7d5d99cb3b0079147a52974e9cb3c2206b"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/crosswalk/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM02.json",
+      "revision": "git 490a7e484dafccde3c171ac2324c7fd32fba0b2b",
+      "sha256": "44919a0abe846266908e13ad0892105246334f4fb939a86fbbdf9f9371aadade"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/crosswalk/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM03.json",
+      "revision": "git 490a7e484dafccde3c171ac2324c7fd32fba0b2b",
+      "sha256": "6f74dd2ee2f364763d7336f37712cd64712aff83386d05cd187b4e9ad3f1121d"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/crosswalk/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM04.json",
+      "revision": "git 490a7e484dafccde3c171ac2324c7fd32fba0b2b",
+      "sha256": "dd95c4af8853363eb0cf7a0a86572fcfdc3ab7af06791ebae9b584897ef4f35a"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/crosswalk/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM05.json",
+      "revision": "git 490a7e484dafccde3c171ac2324c7fd32fba0b2b",
+      "sha256": "cea7434347891885845158d0d73313566d7c1be21e93957cfe4b39c40716d46f"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/crosswalk/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM06.json",
+      "revision": "git 490a7e484dafccde3c171ac2324c7fd32fba0b2b",
+      "sha256": "411bfc290fde252cfcc879df77592c3c8c1c4ce0f5f2c5e225d075e85fff2597"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/crosswalk/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM07.json",
+      "revision": "git 490a7e484dafccde3c171ac2324c7fd32fba0b2b",
+      "sha256": "f0a45b1836199f111b07abe1f1d3d91fff31f25090fe438ccbaa8fea537953d8"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/crosswalk/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM08.json",
+      "revision": "git 490a7e484dafccde3c171ac2324c7fd32fba0b2b",
+      "sha256": "4de6dc33a09a61f59b5e38ff7a33b8cc4eef32718b40f3800a4bda451ad83306"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/crosswalk/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM09.json",
+      "revision": "git 490a7e484dafccde3c171ac2324c7fd32fba0b2b",
+      "sha256": "a36d1d1a765a01a0c64e8b782877c04b80df461ce44f6185cd4738b724f6d0ae"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/genai-security-project/crosswalk/490a7e484dafccde3c171ac2324c7fd32fba0b2b/data/entries/LLM10.json",
+      "revision": "git 490a7e484dafccde3c171ac2324c7fd32fba0b2b",
+      "sha256": "2dc42de4f841f0ce899b0eac17e3a690b29635f092d898f517389bf94ef1900e"
+    }
+  ],
+  "license": "OWASP Top 10 for LLM Applications 2026 © OWASP Foundation / OWASP GenAI Security Project, CC BY-SA 4.0. Crosswalk: OWASP GenAI Security Crosswalk © 2026 OWASP GenAI Data Security Initiative, CC BY-SA 4.0.",
+  "chunkCount": 41,
+  "topicCount": 10,
+  "files": {
+    "chunks.json": "6cc17acb151932fabace5bb9b204834eb1d1e434b752eec025bbb0746078cff3",
+    "topics.json": "7d1147389f16f89d4144b75758a4ec7ec9b17d87bfbdc9f2b618ec45e2f98a23",
+    "crosswalk.json": "7bd0b22688aeeddc83a8074bf927eabd9c6ebfd022bd7f8bc68fed1fc09217fc"
+  }
+}

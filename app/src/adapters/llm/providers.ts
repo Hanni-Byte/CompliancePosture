@@ -1,8 +1,8 @@
 /**
  * Provider registry — the single source of truth for which origins the app
- * may talk to. The build-time CSP generator (scripts/generate-csp.mjs) derives
- * `connect-src` from `cspOrigins`, so adding a provider here is what
- * authorizes it (§2.8). v0.2 adds OpenAI, Anthropic and custom URLs.
+ * may talk to. The build-time CSP generator (scripts/generate-csp.mjs via
+ * ./csp.ts) derives `connect-src` from `cspOrigins`, so adding a provider
+ * here is what authorizes it (§2.8). v0.2 adds OpenAI, Anthropic and custom URLs.
  */
 export interface ProviderSpec {
   id: string;
@@ -14,6 +14,8 @@ export interface ProviderSpec {
   defaultModel: string;
   /** Shown in the setup UI; keep copy-pasteable. */
   notes: string[];
+  /** Provider-specific explanation when the browser reports a CORS block. */
+  corsHint?: string;
 }
 
 export const PROVIDERS: readonly ProviderSpec[] = [
@@ -37,8 +39,10 @@ export const PROVIDERS: readonly ProviderSpec[] = [
     defaultModel: "llama3.2",
     notes: [
       "Start Ollama so this site may call it: OLLAMA_ORIGINS=https://complianceposture.hannibyte.com ollama serve",
+      "Pull the model first: ollama pull llama3.2",
       "Safari may block HTTPS-page → localhost calls; Chrome and Firefox allow them.",
     ],
+    corsHint: "Ollama refused this origin — restart it with OLLAMA_ORIGINS set (see setup notes).",
   },
 ] as const;
 

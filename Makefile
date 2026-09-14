@@ -34,6 +34,7 @@ prod-down:
 
 e2e:
 	docker compose --profile e2e up --build --abort-on-container-exit --exit-code-from e2e
+	docker compose --profile e2e down
 
 # ── Pack pipeline (Feature 2) ────────────────────────────────────────────────
 
@@ -104,6 +105,18 @@ superclean: clean
 	docker compose $(ALL_PROFILES) down --rmi local
 	docker builder prune -f
 
+# ── Pack checks ──────────────────────────────────────────────────────────────
+
+packs-validate:
+	docker compose --profile packs run --rm packs validate /out
+
+packs-check:
+	docker compose --profile packs run --rm packs check /out --raw /raw
+	cd app && npm run packs:check
+
+packs-test:
+	docker compose --profile packs run --rm --entrypoint sh packs -c "ruff check packs tests && pytest -q"
+
 .PHONY: up up-without-vite down restart prod prod-down packs logs logs_tail \
 	vite_logs ollama_logs prod_logs vite_bash ollama_bash prod_bash \
-	ollama-pull check e2e typecheck lint depcruise test smoke clean superclean
+	ollama-pull check e2e packs-validate packs-check packs-test typecheck lint depcruise test smoke clean superclean

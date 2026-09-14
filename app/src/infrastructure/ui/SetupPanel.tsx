@@ -5,16 +5,20 @@ import {
   type ProviderSetupDeps,
 } from "../../adapters/controllers/use-provider-setup";
 
-function errorText(error: LlmError): string {
+export function errorText(error: LlmError): string {
   switch (error.kind) {
     case "auth":
       return "The provider rejected this key. Check it and try again.";
+    case "rate_limit":
+      return error.retryAfterSeconds !== undefined
+        ? `${error.message} — try again in ${error.retryAfterSeconds}s.`
+        : error.message;
     case "cors":
     case "network":
-    case "rate_limit":
     case "invalid_response":
     case "provider_error":
     case "aborted":
+    case "storage":
       return error.message;
   }
 }
@@ -64,12 +68,10 @@ export function SetupPanel({ deps }: { deps: ProviderSetupDeps }) {
         <input
           type="checkbox"
           checked={setup.custody === "session"}
-          onChange={(e) =>
-            setup.selectCustody(e.target.checked ? "session" : "memory")
-          }
+          onChange={(e) => setup.selectCustody(e.target.checked ? "session" : "memory")}
         />
-        Keep the key for this tab session (survives reload, never written to
-        disk)
+        Keep the key for this tab session (survives a reload, cleared when the
+        tab closes; never stored across sessions)
       </label>
 
       {setup.provider ? (
@@ -104,17 +106,14 @@ export function SetupPanel({ deps }: { deps: ProviderSetupDeps }) {
       </div>
 
       {setup.status.phase === "verified" ? (
-        <p className="text-sm text-green-700 dark:text-green-400">
+        <p className="text-sm text-green-700 dark:text-green-400" role="status">
           Connected to {setup.status.verification.providerId} (
           {setup.status.verification.model}), key held in{" "}
-          {setup.status.verification.custody === "memory"
-            ? "memory only"
-            : "this tab's session"}
-          .
+          {setup.status.verification.custody === "memory" ? "memory only" : "this tab's session"}.
         </p>
       ) : null}
       {setup.status.phase === "failed" ? (
-        <p className="text-sm text-red-700 dark:text-red-400">
+        <p className="text-sm text-red-700 dark:text-red-400" role="alert">
           {errorText(setup.status.error)}
         </p>
       ) : null}

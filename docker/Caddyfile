@@ -1,32 +1,48 @@
-# SITE_ADDRESS: ":80" locally / in compose; the Hetzner deploy overrides it to
-# complianceposture.hannibyte.com for auto-TLS (Feature 7).
+# SITE_ADDRESS defaults to ":80". In production the container sits behind
+# Coolify's proxy, which terminates TLS (D24) — keep Caddy on :80 there too;
+# do NOT set a hostname here or Caddy will try to obtain ACME certificates
+# behind the proxy.
 {$SITE_ADDRESS::80} {
 	root * /srv
 	encode gzip zstd
 
 	header {
 		# CSP is generated at build time from the provider registry
-		# (app/scripts/generate-csp.mjs → /etc/caddy/csp.caddy; constitution §8).
+		# (app/scripts/generate-csp.ts → /etc/caddy/csp.caddy; constitution §8).
 		import /etc/caddy/csp.caddy
 		X-Content-Type-Options "nosniff"
 		Referrer-Policy "no-referrer"
+		# HSTS is only honoured over TLS; harmless on plain-http local runs.
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
 		Cross-Origin-Opener-Policy "same-origin"
-		Cross-Origin-Embedder-Policy "require-corp"
+		# credentialless (not require-corp): lets the app's opaque no-cors
+		# reachability probe to provider origins succeed, so a CORS block can be
+		# told apart from a network failure; nothing here needs SharedArrayBuffer.
+		Cross-Origin-Embedder-Policy "credentialless"
 		Cross-Origin-Resource-Policy "same-origin"
 		Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
 		-Server
 	}
 
-	# Long-cache immutable hashed assets; short-cache pack manifests.
+	# Packs: real files, real 404s (no SPA fallback), short cache so a new
+	# manifest is picked up quickly; content is sha256-pinned by the manifest.
+	handle /packs/* {
+		header Cache-Control "public, max-age=300"
+		file_server {
+			precompressed zstd gzip
+		}
+	}
+
+	# Long-cache immutable hashed assets.
 	@immutable path /assets/*
 	header @immutable Cache-Control "public, max-age=31536000, immutable"
-	@packs path /packs/*
-	header @packs Cache-Control "public, max-age=300"
 
 	# Privacy promise: we don't even log your IP. Access logs stay disabled
 	# (Caddy's default when no `log` directive is configured). Do not add one.
 
-	# SPA fallback
-	try_files {path} /index.html
-	file_server
+	# SPA fallback for everything else.
+	handle {
+		try_files {path} /index.html
+		file_server
+	}
 }
