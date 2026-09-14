@@ -40,7 +40,7 @@ RUN printf '%s\n' \
  && CGO_ENABLED=0 go build -trimpath -o /caddy
 
 # Precompress packs so Caddy serves them without per-request compression.
-FROM alpine:3.23@sha256:fd791d74b68913cbb027c6546007b3f0d3bc45125f797758156952bc2d6daf40 AS packs
+FROM alpine:3.24@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b AS packs
 RUN apk add --no-cache zstd gzip
 COPY packs/ /srv/packs/
 RUN find /srv/packs -type f -name '*.json' -exec sh -c 'zstd -q -19 --no-progress "$1" -o "$1.zst" && gzip -9 -k "$1"' _ {} \;
